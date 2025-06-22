@@ -111,8 +111,12 @@ def continue_to_web_search(state: ProductRecommendationState):
     ]
 
 
+# 3. 웹 검색 노드
 def web_search(state: dict, config: RunnableConfig) -> dict:
     """Gemini API의 Google Search 기능을 사용하여 웹 검색을 수행하고 제품 후보를 추출합니다."""
+    
+    from google import genai as google_genai
+    from google.genai import types
     
     configurable = ProductRecommendationConfig.from_runnable_config(config)
     
@@ -121,32 +125,52 @@ def web_search(state: dict, config: RunnableConfig) -> dict:
     search_id = state["id"]
     
     try:
+        # 새로운 Google GenAI SDK 사용
+        client = google_genai.Client()
+        
+        # 웹 검색 도구 정의
+        grounding_tool = types.Tool(
+            google_search=types.GoogleSearch()
+        )
+        
+        # 생성 설정
+        config_obj = types.GenerateContentConfig(
+            tools=[grounding_tool],
+            temperature=0.3
+        )
+        
         # Gemini에 검색 프롬프트 구성
         search_prompt = get_web_search_prompt(query)
 
-        # Gemini API 호출 (Google Search 도구 포함)
-        model = genai.GenerativeModel(configurable.search_model)
-        response = model.generate_content(
-            search_prompt,
-            tools=[{"google_search": {}}],
-            generation_config=genai.types.GenerationConfig(temperature=0.3)
+        # Gemini API 호출 (새로운 방식)
+        response = client.models.generate_content(
+            model=configurable.search_model,
+            contents=search_prompt,
+            config=config_obj
         )
         
-        # grounding metadata에서 출처 정보 추출 (quickstart 방식)
+        # grounding metadata에서 출처 정보 추출
         sources_gathered = []
-        if hasattr(response, 'candidates') and response.candidates:
-            candidate = response.candidates[0]
-            if hasattr(candidate, 'grounding_metadata') and candidate.grounding_metadata:
-                for chunk in candidate.grounding_metadata.grounding_chunks:
-                    if hasattr(chunk, 'web') and chunk.web:
-                        sources_gathered.append({
-                            "title": chunk.web.title,
-                            "url": chunk.web.uri,
-                            "search_id": search_id
-                        })
+        try:
+            if hasattr(response, 'candidates') and response.candidates:
+                candidate = response.candidates[0]
+                if hasattr(candidate, 'grounding_metadata') and candidate.grounding_metadata:
+                    grounding_chunks = getattr(candidate.grounding_metadata, 'grounding_chunks', None)
+                    if grounding_chunks:
+                        for chunk in grounding_chunks:
+                            if hasattr(chunk, 'web') and chunk.web:
+                                sources_gathered.append({
+                                    "title": getattr(chunk.web, 'title', '제목 없음'),
+                                    "url": getattr(chunk.web, 'uri', ''),
+                                    "search_id": search_id
+                                })
+        except Exception as e:
+            print(f"출처 정보 추출 오류: {e}")
+            sources_gathered = []
         
         # 제품 정보 추출
-        products = extract_products_from_search_result(response.text, sources_gathered)
+        response_text = getattr(response, 'text', '') or ''
+        products = extract_products_from_search_result(response_text, sources_gathered)
         
         return {
             "search_queries": [query],
@@ -354,6 +378,7 @@ def create_test_product_recommendation_graph():
     # 노드 추가
     builder.add_node("validate_request", validate_request)
     builder.add_node("generate_search_queries", generate_search_queries)
+    builder.add_node("web_search", web_search)
 
     # 엣지 구성
     builder.add_edge(START, "validate_request")
@@ -366,7 +391,9 @@ def create_test_product_recommendation_graph():
         }
     )
     
-    builder.add_edge("generate_search_queries", END)
+    # 동적 병렬 검색을 위한 조건부 엣지
+    builder.add_conditional_edges("generate_search_queries", continue_to_web_search, ["web_search"])
+    builder.add_edge("web_search", END)
     
     return builder.compile()
 
