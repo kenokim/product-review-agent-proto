@@ -43,21 +43,7 @@ class ProductRecommendationState(TypedDict):
     max_products: int
     search_depth: int
 
-# ========== 구조화된 출력 스키마 ==========
 
-class RequestValidationState(BaseModel):
-    is_specific: bool = Field(description="요청이 구체적인지 여부")
-    clarification_question: str = Field(description="구체화를 위한 질문")
-    extracted_requirements: dict = Field(description="추출된 요구사항")
-
-class SearchQueryState(BaseModel):
-    queries: List[str] = Field(description="생성된 검색어 목록")
-    rationale: str = Field(description="검색어 선택 이유")
-
-class ReflectionResult(BaseModel):
-    is_sufficient: bool = Field(description="현재 결과가 충분한지 여부")
-    additional_queries: List[str] = Field(description="추가 검색어 목록")
-    gap_analysis: str = Field(description="부족한 부분 분석")
 
 # ========== 설정 시스템 ==========
 

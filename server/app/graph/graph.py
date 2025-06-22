@@ -20,11 +20,15 @@ from .prompts import (
 from .state import (
     Product,
     ProductRecommendationState,
-    RequestValidationState,
-    SearchQueryState,
-    ReflectionResult,
     ProductRecommendationConfig,
     get_latest_user_message
+)
+
+# 스키마 import
+from .tools_and_schemas import (
+    ValidationResult,
+    SearchQueryResult,
+    ReflectionResult
 )
 
 # Environment setup
@@ -55,7 +59,7 @@ def validate_request(state: ProductRecommendationState, config: RunnableConfig) 
     )
     
     # 구조화된 출력을 위한 스키마 적용
-    structured_llm = llm.with_structured_output(RequestValidationState)
+    structured_llm = llm.with_structured_output(ValidationResult)
     
     # 사용자 요청 추출
     user_message = get_latest_user_message(state["messages"])
@@ -86,7 +90,7 @@ def generate_search_queries(state: ProductRecommendationState, config: RunnableC
         api_key=os.getenv("GEMINI_API_KEY")
     )
     
-    structured_llm = llm.with_structured_output(SearchQueryState)
+    structured_llm = llm.with_structured_output(SearchQueryResult)
     
     user_intent = state.get("user_intent", "")
     user_message = get_latest_user_message(state["messages"])

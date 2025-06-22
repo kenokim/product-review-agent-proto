@@ -36,8 +36,8 @@ Instructions:
 Output Format:
 - Format your response as a JSON object with these exact keys:
    - "is_specific": true or false
-   - "clarification_question": 불충분할 경우 구체화를 위한 질문 (한국어, is_specific이 false인 경우만)
-   - "extracted_requirements": 추출된 요구사항들 (딕셔너리 형태)
+   - "clarification_question": 불충분할 경우 구체화를 위한 질문 (한국어, is_specific이 false인 경우만, 아니면 빈 문자열)
+   - "extracted_requirements": 추출된 요구사항들을 JSON 객체로 (예: {"카테고리": "키보드", "용도": "게이밍", "예산": "10만원"})
 
 사용자 요청: {user_message}"""
 
