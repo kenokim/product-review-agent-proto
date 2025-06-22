@@ -10,7 +10,7 @@ const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      message: "안녕하세요! AI 제품 비교 에이전트입니다. 어떤 제품을 추천해 드릴까요? 🛍️",
+      message: "안녕하세요! AI 제품 추천 에이전트입니다. 어떤 제품을 추천해 드릴까요? 🛍️",
       isBot: true,
       timestamp: "방금 전"
     }
@@ -25,7 +25,10 @@ const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // 메시지가 2개 이상일 때만 스크롤 (초기 봇 메시지 1개는 제외)
+    if (messages.length > 1) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   const handleSendMessage = async () => {

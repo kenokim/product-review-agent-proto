@@ -1,5 +1,4 @@
-
-import { TrendingUp, ExternalLink, Star, Clock, Users } from "lucide-react";
+import { TrendingUp, ExternalLink, Clock, Users } from "lucide-react";
 
 const RelatedProducts = () => {
   const relatedPosts = [
@@ -23,14 +22,6 @@ const RelatedProducts = () => {
     }
   ];
 
-  const popularCategories = [
-    { name: "노트북/PC", count: 152 },
-    { name: "키보드/마우스", count: 89 },
-    { name: "헤드폰/이어폰", count: 76 },
-    { name: "스마트폰", count: 134 },
-    { name: "모니터", count: 67 }
-  ];
-
   const recentComparisons = [
     { product1: "아이폰 15", product2: "갤럭시 S24", time: "5분 전" },
     { product1: "맥북 에어", product2: "LG 그램", time: "12분 전" },
@@ -39,11 +30,11 @@ const RelatedProducts = () => {
 
   return (
     <div className="w-80 bg-white border-l border-gray-200 p-6 overflow-y-auto">
-      {/* 연관 제품 비교 섹션 */}
+      {/* 연관 제품 추천 섹션 */}
       <div className="mb-8">
         <div className="flex items-center space-x-2 mb-6">
           <TrendingUp className="w-5 h-5 text-blue-600" />
-          <h2 className="text-lg font-semibold text-gray-900">연관 제품 비교</h2>
+          <h2 className="text-lg font-semibold text-gray-900">연관 제품 추천</h2>
         </div>
         
         <div className="space-y-4">
@@ -66,27 +57,12 @@ const RelatedProducts = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* 인기 카테고리 섹션 */}
-      <div className="mb-8">
-        <div className="flex items-center space-x-2 mb-4">
-          <Star className="w-5 h-5 text-orange-500" />
-          <h3 className="text-md font-semibold text-gray-900">인기 카테고리</h3>
-        </div>
         
-        <div className="space-y-2">
-          {popularCategories.map((category, index) => (
-            <div 
-              key={index}
-              className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
-            >
-              <span className="text-sm text-gray-700">{category.name}</span>
-              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                {category.count}
-              </span>
-            </div>
-          ))}
+        {/* 자세히 보기 버튼 */}
+        <div className="mt-4 text-center">
+          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors">
+            자세히 보기 →
+          </button>
         </div>
       </div>
 
