@@ -45,8 +45,33 @@ result = run_product_recommendation_sync("10만원 이하 가성비 좋은 게�
 print(result)
 ```
 
+## 🧪 테스트 실행
+
+### 전체 테스트 실행
+```bash
+pytest -v
+```
+
+### 특정 노드 테스트
+```bash
+# validate_request 노드만 테스트
+pytest -k "validate_request" -v
+
+# 특정 제품 케이스만 테스트
+pytest -k "earphones" -v
+```
+
+### 테스트 커버리지 확인
+```bash
+pytest --cov=app --cov-report=html
+```
+
 ## 📁 구조
 - `app/graph/graph.py`: 제품 추천 그래프 구현
+- `app/graph/state.py`: 상태 정의 및 설정
+- `app/graph/prompts.py`: 프롬프트 템플릿
+- `app/graph/tools_and_schemas.py`: 구조화된 출력 스키마
+- `test_graph.py`: 노드별 단위 테스트
 - `requirements.txt`: 필요한 패키지 목록
 
 ## 🔧 주요 기능

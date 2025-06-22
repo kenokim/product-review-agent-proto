@@ -16,13 +16,15 @@ from .prompts import (
     get_answer_prompt
 )
 
-# State 및 설정 import
+# State import
 from .state import (
     Product,
     ProductRecommendationState,
-    ProductRecommendationConfig,
     get_latest_user_message
 )
+
+# 설정 import
+from .config import ProductRecommendationConfig
 
 # 스키마 import
 from .tools_and_schemas import (
