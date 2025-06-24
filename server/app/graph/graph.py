@@ -74,11 +74,21 @@ def validate_request(state: ProductRecommendationState, config: RunnableConfig) 
     
     logger.info(f"[validate_request] 검증 완료 - 구체적 여부: {result.is_specific}")
     
-    return {
-        "is_request_specific": result.is_specific,
-        "response_to_user": result.clarification_question if not result.is_specific else "",
-        "user_intent": result.extracted_requirements.get("intent", "")
-    }
+    # 반려될 경우 AI 메시지를 state에 추가
+    if not result.is_specific and result.clarification_question:
+        ai_message = AIMessage(content=result.clarification_question)
+        return {
+            "is_request_specific": result.is_specific,
+            "response_to_user": result.clarification_question,
+            "user_intent": result.extracted_requirements.get("intent", ""),
+            "messages": [ai_message]  # AI가 생성한 구체화 질문을 메시지로 추가
+        }
+    else:
+        return {
+            "is_request_specific": result.is_specific,
+            "response_to_user": result.clarification_question if not result.is_specific else "",
+            "user_intent": result.extracted_requirements.get("intent", "")
+        }
 
 
 # 2. 검색어 생성 노드
