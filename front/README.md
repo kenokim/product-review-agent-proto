@@ -4,6 +4,35 @@
 
 **URL**: https://lovable.dev/projects/86d9711e-e0a7-49a0-b733-811651c17530
 
+## API 연결 설정
+
+이 프론트엔드는 백엔드 API 서버와 연결됩니다.
+
+### 1. 백엔드 서버 실행
+```sh
+# 백엔드 서버 디렉토리로 이동
+cd ../server
+
+# 서버 실행 (FastAPI)
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### 2. 프론트엔드 실행
+```sh
+# 프론트엔드 디렉토리에서
+npm run dev
+```
+
+### 3. API 설정
+- 기본 API URL: `http://localhost:8000/api/v1`
+- 환경 변수로 변경 가능: `VITE_API_BASE_URL`
+
+### 4. 기능
+- 🤖 AI 제품 추천 채팅
+- 🔍 실시간 웹 검색
+- 📚 출처 정보 표시
+- 💬 대화 스레드 관리
+
 ## How can I edit this code?
 
 There are several ways of editing your application.

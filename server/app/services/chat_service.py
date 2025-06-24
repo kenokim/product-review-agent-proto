@@ -79,9 +79,12 @@ class ChatService:
         messages = result.get("messages", [])
         last_message = ""
         if messages:
-            # 마지막 assistant 메시지 찾기
+            # 마지막 assistant 메시지 찾기 (AIMessage 객체와 dict 모두 처리)
             for msg in reversed(messages):
-                if isinstance(msg, dict) and msg.get("role") == "assistant":
+                if hasattr(msg, 'content'):  # AIMessage 객체 처리
+                    last_message = msg.content
+                    break
+                elif isinstance(msg, dict) and msg.get("role") == "assistant":  # dict 처리
                     last_message = msg.get("content", "")
                     break
         

@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, AlertCircle } from "lucide-react";
 import ChatMessage from "./ChatMessage";
+import { ChatAPI, ChatMessage as ChatMessageType } from "@/lib/api";
 
 interface ChatInterfaceProps {
   onUserInteraction?: () => void;
 }
 
 const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<ChatMessageType[]>([
     {
       id: 1,
       message: "안녕하세요! AI 제품 추천 에이전트입니다. 어떤 제품을 추천해 드릴까요? 🛍️",
@@ -18,6 +19,7 @@ const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -25,14 +27,24 @@ const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
   };
 
   useEffect(() => {
-    // 메시지가 2개 이상일 때만 스크롤 (초기 봇 메시지 1개는 제외)
     if (messages.length > 1) {
       scrollToBottom();
     }
   }, [messages]);
 
+  const formatTimestamp = () => {
+    const now = new Date();
+    return now.toLocaleTimeString('ko-KR', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
+
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
+
+    // 에러 상태 초기화
+    setError(null);
 
     // 첫 번째 사용자 메시지일 때 사이드바 표시
     if (!hasInteracted) {
@@ -40,66 +52,58 @@ const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
       onUserInteraction?.();
     }
 
-    const userMessage = {
-      id: messages.length + 1,
+    const userMessage: ChatMessageType = {
+      id: Date.now(),
       message: inputValue,
       isBot: false,
-      timestamp: "방금 전"
+      timestamp: formatTimestamp()
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentMessage = inputValue;
     setInputValue("");
     setIsLoading(true);
 
-    // 시뮬레이션된 봇 응답
-    setTimeout(() => {
-      let botResponse = "";
+    try {
+      // 실제 API 호출
+      const response = await ChatAPI.sendMessage(currentMessage);
       
-      if (inputValue.toLowerCase().includes("키보드")) {
-        botResponse = `키보드 추천을 원하시는군요! 더 구체적으로 알려주시면 도움이 될 것 같습니다:
+      console.log(response);
 
-• 가성비 좋은 키보드
-• 게이밍용 키보드  
-• 무소음 키보드
-• 무선 키보드
-
-어떤 특성을 원하시나요?`;
-      } else if (inputValue.toLowerCase().includes("가성비")) {
-        botResponse = `가성비 좋은 키보드 추천 목록입니다:
-
-🏆 **추천 제품들**
-• 독거미 K552 기계식 키보드
-  - 가격: 약 45,000원
-  - 출처: 네이버 블로그 리뷰
-  - 리뷰: "이 가격에 이 품질이면 정말 만족"
-
-• 로지텍 K380 무선키보드  
-  - 가격: 약 35,000원
-  - 쿠팡 평점: 4.5/5
-  - 리뷰: "가성비 최고, 타건감도 괜찮음"
-
-더 자세한 정보가 필요하시면 말씀해 주세요!`;
-      } else {
-        botResponse = `"${inputValue}"에 대해 검색해보겠습니다. 조금 더 구체적인 조건이 있으시면 더 정확한 추천을 도와드릴 수 있어요!
-
-예를 들어:
-• 예산 범위
-• 사용 목적
-• 선호하는 특징
-
-어떤 부분을 중요하게 생각하시나요?`;
-      }
-
-      const botMessage = {
-        id: messages.length + 2,
-        message: botResponse,
+      const botMessage: ChatMessageType = {
+        id: Date.now() + 1,
+        message: response.message,
         isBot: true,
-        timestamp: "방금 전"
+        timestamp: formatTimestamp(),
+        sources: response.sources
       };
 
       setMessages(prev => [...prev, botMessage]);
+      
+      // 처리 시간과 검색어 정보를 콘솔에 로그
+      console.log('🔍 검색어:', response.search_queries_used);
+      console.log('⏱️ 처리 시간:', response.processing_time.toFixed(2) + '초');
+      console.log('📚 출처 수:', response.sources.length);
+      
+    } catch (error) {
+      console.error('메시지 전송 실패:', error);
+      
+      // 에러 메시지 설정
+      const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
+      setError(errorMessage);
+      
+      // 에러 응답 메시지 추가
+      const errorBotMessage: ChatMessageType = {
+        id: Date.now() + 1,
+        message: `죄송합니다. 현재 서비스에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.\n\n오류: ${errorMessage}`,
+        isBot: true,
+        timestamp: formatTimestamp()
+      };
+
+      setMessages(prev => [...prev, errorBotMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -109,8 +113,41 @@ const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
     }
   };
 
+  const handleRetry = () => {
+    setError(null);
+    if (messages.length > 1) {
+      // findLast 대신 reverse()와 find() 사용
+      const lastUserMessage = [...messages].reverse().find(msg => !msg.isBot);
+      if (lastUserMessage) {
+        setInputValue(lastUserMessage.message);
+      }
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-gray-50">
+      {/* 에러 알림 */}
+      {error && (
+        <div className="bg-red-50 border-l-4 border-red-400 p-4 mx-4 mt-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <AlertCircle className="h-5 w-5 text-red-400" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700">
+                연결에 문제가 발생했습니다. 서버가 실행 중인지 확인해 주세요.
+              </p>
+              <button
+                onClick={handleRetry}
+                className="mt-2 text-sm text-red-600 hover:text-red-500 underline"
+              >
+                다시 시도
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 메시지 영역 */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.map((message) => (
@@ -119,15 +156,26 @@ const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
             message={message.message}
             isBot={message.isBot}
             timestamp={message.timestamp}
+            sources={message.sources}
           />
         ))}
+        
+        {/* 로딩 상태 */}
         {isLoading && (
           <div className="flex space-x-3 mb-6">
             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
               <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
             </div>
-            <div className="bg-gray-100 px-4 py-3 rounded-2xl">
-              <p className="text-sm text-gray-600">검색 중...</p>
+            <div className="bg-white border border-gray-200 px-4 py-3 rounded-2xl">
+              <p className="text-sm text-gray-600">
+                <span className="inline-flex items-center">
+                  검색 중
+                  <span className="ml-1 animate-pulse">...</span>
+                </span>
+              </p>
+              <p className="text-xs text-gray-400 mt-1">
+                Thread ID: {ChatAPI.getThreadId()}
+              </p>
             </div>
           </div>
         )}
@@ -151,8 +199,21 @@ const ChatInterface = ({ onUserInteraction }: ChatInterfaceProps) => {
             disabled={!inputValue.trim() || isLoading}
             className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2"
           >
-            <Send className="w-4 h-4" />
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Send className="w-4 h-4" />
+            )}
           </button>
+        </div>
+        
+        {/* 상태 정보 */}
+        <div className="mt-2 text-xs text-gray-500 text-center">
+          {isLoading ? (
+            <span>AI가 최적의 제품을 찾고 있습니다...</span>
+          ) : (
+            <span>Enter 키를 눌러 메시지를 보내세요</span>
+          )}
         </div>
       </div>
     </div>

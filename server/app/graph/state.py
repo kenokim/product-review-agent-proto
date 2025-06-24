@@ -19,9 +19,10 @@ class ProductRecommendationState(TypedDict):
     is_request_specific: bool
     user_intent: str
     
-    # 검색 관련 데이터
+    # 검색 관련 데이터 (quickstart 패턴 참고)
     search_queries: Annotated[list, operator.add]
     search_results: Annotated[list, operator.add]
+    web_research_result: Annotated[list, operator.add]  # 병렬 웹 검색 결과 병합
     
     # 제품 데이터
     candidate_products: Annotated[list, operator.add]
