@@ -12,7 +12,7 @@ class ProductRecommendationConfig(BaseModel):
     analysis_model: str = Field(default="gemini-2.0-flash", description="제품 분석용 모델")
     
     # 검색 설정
-    max_search_queries: int = Field(default=3, description="최대 검색어 수")
+    max_search_queries: int = Field(default=1, description="최대 검색어 수")
     max_products_per_query: int = Field(default=5, description="검색어당 최대 제품 수")
     max_candidate_products: int = Field(default=10, description="최대 후보 제품 수")
     

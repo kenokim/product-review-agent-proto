@@ -1,13 +1,18 @@
 import os
-from typing import List
+from dotenv import load_dotenv
+
+# LangGraph 관련
 from langgraph.graph import StateGraph, START, END
 from langgraph.types import Send
 from langchain_core.runnables import RunnableConfig
 from langchain_core.messages import AIMessage
-from langchain_google_genai import ChatGoogleGenerativeAI
-import google.generativeai as genai
 
-# 프롬프트 함수 import
+# LLM 관련
+from langchain_google_genai import ChatGoogleGenerativeAI
+from google import genai as google_genai
+from google.genai import types
+
+# 로컬 모듈 import
 from .prompts import (
     get_validation_prompt,
     get_search_query_prompt,
@@ -15,34 +20,21 @@ from .prompts import (
     get_reflection_prompt,
     get_answer_prompt
 )
-
-# State import
 from .state import (
-    Product,
     ProductRecommendationState,
     get_latest_user_message
 )
-
-# 설정 import
 from .config import ProductRecommendationConfig
-
-# 스키마 import
 from .tools_and_schemas import (
     ValidationResult,
     SearchQueryResult,
     ReflectionResult
 )
 
-# Environment setup
-from dotenv import load_dotenv
-
 load_dotenv()
 
 if os.getenv("GEMINI_API_KEY") is None:
     raise ValueError("GEMINI_API_KEY is not set")
-
-# Gemini 클라이언트 초기화
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # ========== 노드 구현 ==========
 
@@ -56,7 +48,8 @@ def validate_request(state: ProductRecommendationState, config: RunnableConfig) 
     llm = ChatGoogleGenerativeAI(
         model=configurable.validation_model,
         temperature=0.1,
-        max_retries=2,
+        max_retries=5,  # 재시도 횟수 증가
+        retry_delay=2,  # 재시도 간격 추가
         api_key=os.getenv("GEMINI_API_KEY")
     )
     
@@ -115,8 +108,7 @@ def continue_to_web_search(state: ProductRecommendationState):
 def web_search(state: dict, config: RunnableConfig) -> dict:
     """Gemini API의 Google Search 기능을 사용하여 웹 검색을 수행하고 제품 후보를 추출합니다."""
     
-    from google import genai as google_genai
-    from google.genai import types
+    from .utils import resolve_urls, get_citations, insert_citation_markers
     
     configurable = ProductRecommendationConfig.from_runnable_config(config)
     
@@ -124,120 +116,33 @@ def web_search(state: dict, config: RunnableConfig) -> dict:
     query = state["search_query"]
     search_id = state["id"]
     
-    try:
-        # 새로운 Google GenAI SDK 사용
-        client = google_genai.Client()
-        
-        # 웹 검색 도구 정의
-        grounding_tool = types.Tool(
-            google_search=types.GoogleSearch()
-        )
-        
-        # 생성 설정
-        config_obj = types.GenerateContentConfig(
-            tools=[grounding_tool],
+    client = google_genai.Client()
+    
+    search_prompt = get_web_search_prompt(query)
+
+    response = client.models.generate_content(
+        model=configurable.search_model,
+        contents=search_prompt,
+        config=types.GenerateContentConfig(
+            tools=[types.Tool(google_search=types.GoogleSearch())],
             temperature=0.3
         )
-        
-        # Gemini에 검색 프롬프트 구성
-        search_prompt = get_web_search_prompt(query)
+    )
 
-        # Gemini API 호출 (새로운 방식)
-        response = client.models.generate_content(
-            model=configurable.search_model,
-            contents=search_prompt,
-            config=config_obj
-        )
-        
-        # grounding metadata에서 출처 정보 추출
-        sources_gathered = []
-        try:
-            if hasattr(response, 'candidates') and response.candidates:
-                candidate = response.candidates[0]
-                if hasattr(candidate, 'grounding_metadata') and candidate.grounding_metadata:
-                    grounding_chunks = getattr(candidate.grounding_metadata, 'grounding_chunks', None)
-                    if grounding_chunks:
-                        for chunk in grounding_chunks:
-                            if hasattr(chunk, 'web') and chunk.web:
-                                sources_gathered.append({
-                                    "title": getattr(chunk.web, 'title', '제목 없음'),
-                                    "url": getattr(chunk.web, 'uri', ''),
-                                    "search_id": search_id
-                                })
-        except Exception as e:
-            print(f"출처 정보 추출 오류: {e}")
-            sources_gathered = []
-        
-        # 제품 정보 추출
-        response_text = getattr(response, 'text', '') or ''
-        products = extract_products_from_search_result(response_text, sources_gathered)
-        
-        return {
-            "search_queries": [query],
-            "candidate_products": products,
-            "sources_gathered": sources_gathered
-        }
-        
-    except Exception as e:
-        print(f"검색 오류 ({query}): {e}")
-        return {
-            "search_queries": [query],
-            "candidate_products": [],
-            "sources_gathered": []
-        }
+    resolved_urls = resolve_urls(response.candidates[0].grounding_metadata.grounding_chunks, 1)
+    citations = get_citations(response, resolved_urls)
+
+    modified_text = insert_citation_markers(response.text, citations)
+    sources_gathered = [item for citation in citations for item in citation["segments"]]
+
+    return {
+        "sources_gathered": sources_gathered,
+        "search_query": [state["search_query"]],
+        "web_research_result": [modified_text],
+    }
 
 
-def extract_products_from_search_result(content: str, sources: List) -> List[Product]:
-    """검색 결과에서 제품 정보를 추출합니다."""
-    
-    products = []
-    
-    try:
-        # 검색 결과에서 제품 정보 추출 로직
-        if "추천" in content and ("제품" in content or "상품" in content):
-            # 간단한 파싱 - 실제로는 더 정교한 LLM 기반 추출 필요
-            lines = content.split('\n')
-            current_product = {}
-            
-            for line in lines:
-                line = line.strip()
-                if not line:
-                    continue
-                    
-                # 제품명 추출 시도
-                if any(keyword in line for keyword in ['추천', '베스트', '인기', '순위']):
-                    if current_product and current_product.get('name'):
-                        products.append(current_product)
-                        current_product = {}
-                    
-                    current_product = {
-                        "name": line[:50],  # 첫 50자만
-                        "source_url": sources[0]["url"] if sources else "",
-                        "purchase_link": "",
-                        "review_summary": content[:200] + "...",
-                        "price_range": "가격 정보 확인 필요"
-                    }
-            
-            # 마지막 제품 추가
-            if current_product and current_product.get('name'):
-                products.append(current_product)
-            
-            # 최소 1개는 반환
-            if not products and sources:
-                products.append({
-                    "name": f"검색 결과 제품 ({len(sources)}개 출처)",
-                    "source_url": sources[0]["url"],
-                    "purchase_link": "",
-                    "review_summary": content[:200] + "..." if content else "검색 결과를 확인해주세요.",
-                    "price_range": "가격 정보 확인 필요"
-                })
-                
-    except Exception as e:
-        print(f"제품 추출 오류: {e}")
-    
-    return products[:3]  # 최대 3개까지
-
-
+# 4. 리플렉션
 def reflection(state: ProductRecommendationState, config: RunnableConfig) -> dict:
     """검색 결과를 평가하고 추가 검색이 필요한지 판단합니다."""
     
@@ -267,60 +172,53 @@ def reflection(state: ProductRecommendationState, config: RunnableConfig) -> dic
     }
 
 
-def should_continue_search(state: ProductRecommendationState) -> str:
-    """추가 검색 필요성에 따른 라우팅 결정"""
-    max_loops = state.get("max_search_loops", 2)
-    current_loop = state.get("search_loop_count", 0)
+# 5. 답변 생성
+def answer_generation(state: ProductRecommendationState, config: RunnableConfig) -> dict:
+    """최종 답변을 생성합니다. quickstart의 finalize_answer 패턴을 따릅니다."""
     
-    if state.get("is_sufficient", False) or current_loop >= max_loops:
-        return "format_response"
-    else:
-        return "generate_search_queries"
-
-
-def format_response(state: ProductRecommendationState, config: RunnableConfig) -> dict:
-    """최종 추천 결과를 사용자 친화적인 형태로 포맷팅합니다."""
+    configurable = ProductRecommendationConfig.from_runnable_config(config)
     
+    # LLM 초기화
+    llm = ChatGoogleGenerativeAI(
+        model=configurable.analysis_model,  # 답변 생성에는 분석 모델 사용
+        temperature=0.1,
+        max_retries=2,
+        api_key=os.getenv("GEMINI_API_KEY")
+    )
+    
+    # 사용자 요청과 검색 결과 수집
     user_message = get_latest_user_message(state["messages"])
-    candidate_products = state.get("candidate_products", [])
+    web_research_results = state.get("web_research_result", [])
+    sources_gathered = state.get("sources_gathered", [])
     
-    if not candidate_products:
-        response = "죄송합니다. 요청하신 조건에 맞는 제품을 찾지 못했습니다. 다른 키워드로 다시 검색해보시겠어요?"
-    else:
-        response = format_product_recommendations(user_message, candidate_products)
+    # 답변 생성 프롬프트 구성
+    summaries = "\n---\n".join(web_research_results) if web_research_results else "검색 결과가 없습니다."
+    answer_prompt = get_answer_prompt(user_message, summaries)
+    
+    # 답변 생성
+    result = llm.invoke(answer_prompt)
+    
+    # 단축 URL을 원본 URL로 변환
+    final_content = result.content if result and hasattr(result, 'content') else "답변 생성에 실패했습니다."
+    unique_sources = []
+    
+    if sources_gathered and isinstance(sources_gathered, list):
+        for source in sources_gathered:
+            if (isinstance(source, dict) and 
+                source.get("short_url") and 
+                source["short_url"] in final_content):
+                # 단축 URL을 원본 URL로 교체
+                final_content = final_content.replace(
+                    source["short_url"], 
+                    source.get("value", source["short_url"])
+                )
+                unique_sources.append(source)
     
     return {
-        "response_to_user": response,
-        "messages": [AIMessage(content=response)]
+        "messages": [AIMessage(content=final_content)],
+        "sources_gathered": unique_sources,
+        "response_to_user": final_content
     }
-
-
-def format_product_recommendations(user_request: str, products: List[Product]) -> str:
-    """제품 추천 결과를 마크다운 형식으로 포맷팅"""
-    
-    response = f"**'{user_request}'** 요청에 대한 추천 제품입니다! 🎯\n\n"
-    
-    for i, product in enumerate(products[:5], 1):  # 최대 5개까지
-        response += f"## {i}. {product['name']}\n\n"
-        
-        if product.get('price_range'):
-            response += f"💰 **가격대**: {product['price_range']}\n\n"
-        
-        if product.get('review_summary'):
-            response += f"📝 **제품 정보**:\n{product['review_summary']}\n\n"
-        
-        if product.get('purchase_link'):
-            response += f"🛒 [구매하러 가기]({product['purchase_link']})\n\n"
-        
-        if product.get('source_url'):
-            response += f"📚 [상세 정보 보기]({product['source_url']})\n\n"
-        
-        response += "---\n\n"
-    
-    response += "💡 **추가 문의사항이 있으시면 언제든 말씀해주세요!**"
-    
-    return response
-
 
 def should_refine_or_search(state: ProductRecommendationState) -> str:
     """요청의 구체성에 따른 라우팅 결정"""
@@ -339,7 +237,7 @@ def create_product_recommendation_graph():
     builder.add_node("generate_search_queries", generate_search_queries)
     builder.add_node("web_search", web_search)
     builder.add_node("reflection", reflection)
-    builder.add_node("format_response", format_response)
+    builder.add_node("answer_generation", answer_generation)
     
     # 엣지 구성
     builder.add_edge(START, "validate_request")
@@ -353,48 +251,10 @@ def create_product_recommendation_graph():
     )
     builder.add_conditional_edges("generate_search_queries", continue_to_web_search, ["web_search"])
     builder.add_edge("web_search", "reflection")
-    builder.add_conditional_edges(
-        "reflection",
-        should_continue_search,
-        {
-            "generate_search_queries": "generate_search_queries",  # 추가 검색 필요
-            "format_response": "format_response"  # 검색 완료
-        }
-    )
-    builder.add_edge("format_response", END)
+    builder.add_edge("reflection", "answer_generation")
+    builder.add_edge("answer_generation", END)
     
     return builder.compile()
 
-# 그래프 인스턴스 생성 (quickstart 방식)
-#graph = create_product_recommendation_graph()
-
-# 테스트 그래프 구성
-def create_test_product_recommendation_graph():
-    """제품 추천 그래프 생성"""
-    
-    # 그래프 빌더 초기화
-    builder = StateGraph(ProductRecommendationState, config_schema=ProductRecommendationConfig)
-    
-    # 노드 추가
-    builder.add_node("validate_request", validate_request)
-    builder.add_node("generate_search_queries", generate_search_queries)
-    builder.add_node("web_search", web_search)
-
-    # 엣지 구성
-    builder.add_edge(START, "validate_request")
-    builder.add_conditional_edges(
-        "validate_request",
-        should_refine_or_search,
-        {
-            "refine": END,  # 구체화 질문으로 종료
-            "search": "generate_search_queries"  # 검색 진행
-        }
-    )
-    
-    # 동적 병렬 검색을 위한 조건부 엣지
-    builder.add_conditional_edges("generate_search_queries", continue_to_web_search, ["web_search"])
-    builder.add_edge("web_search", END)
-    
-    return builder.compile()
-
-graph = create_test_product_recommendation_graph()
+# 그래프 인스턴스 생성
+graph = create_product_recommendation_graph()

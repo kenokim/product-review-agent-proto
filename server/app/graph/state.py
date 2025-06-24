@@ -40,10 +40,6 @@ class ProductRecommendationState(TypedDict):
     max_products: int
     search_depth: int
 
-
-
-
-
 # ========== 유틸리티 함수 ==========
 
 def get_latest_user_message(messages: List) -> str:

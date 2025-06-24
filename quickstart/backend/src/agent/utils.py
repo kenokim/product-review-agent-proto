@@ -19,7 +19,7 @@ def get_research_topic(messages: List[AnyMessage]) -> str:
     return research_topic
 
 
-def resolve_urls(urls_to_resolve: List[Any], id: int) -> Dict[str, str]:
+def resolve_urls(urls_to_resolve: List[Any]) -> Dict[str, str]:
     """
     Create a map of the vertex ai search urls (very long) to a short url with a unique id for each url.
     Ensures each original URL gets a consistent shortened form while maintaining uniqueness.
@@ -31,7 +31,7 @@ def resolve_urls(urls_to_resolve: List[Any], id: int) -> Dict[str, str]:
     resolved_map = {}
     for idx, url in enumerate(urls):
         if url not in resolved_map:
-            resolved_map[url] = f"{prefix}{id}-{idx}"
+            resolved_map[url] = f"{prefix}1-{idx}"
 
     return resolved_map
 
