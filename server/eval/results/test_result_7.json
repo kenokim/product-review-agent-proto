@@ -1,13 +1,13 @@
 {
   "test_info": {
     "test_id": 7,
-    "timestamp": "2025-06-26T00:30:31.236117",
-    "response_time_ms": 120203.72915267944,
-    "status_code": 0,
-    "success": false
+    "timestamp": "2025-06-26T01:22:55.664563",
+    "response_time_ms": 91545.05,
+    "status_code": 200,
+    "success": true
   },
   "query": "재택근무용 웹캠 추천, 화질 좋고 10만원 이내로",
-  "response": "",
+  "response": "다음은 10만원 이내, 화질 좋은 재택근무용 웹캠 추천입니다.\n\n1.  **로지텍 C922 Pro HD:** 95,700원 ([https://link.coupang.com/a/cgSygo](https://link.coupang.com/a/cgSygo))\n    *   1080p/30fps, 720p/60fps 지원으로 높은 해상도와 부드러운 화면을 제공합니다. 스트리밍에 특화되어 움직임이 많은 콘텐츠에 적합하며, 배경 교체 기능으로 깔끔한 화면 연출이 가능합니다. ([https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHhf4Y7WGWw74dX4HY\\_Xv22EIWDaVqJlDOjvoWLeEtbbmL82eWhpQfhg5536N920YlJ3F1d\\_0DW8OEH84Y7nZ2j-sVy5GeBSbjLLN0\\_qd-M9FFgSTo70A-YbqFjWhlyxiLyn9\\_DJA==](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHhf4Y7WGWw74dX4HY_Xv22EIWDaVqJlDOjvoWLeEtbbmL82eWhpQfhg5536N920YlJ3F1d_0DW8OEH84Y7nZ2j-sVy5GeBSbjLLN0_qd-M9FFgSTo70A-YbqFjWhlyxiLyn9_DJA==))\n\n2.  **로지텍 C920 Pro HD:**\n    *   Full HD 1080p 해상도와 글래스 렌즈로 선명한 화질을 제공합니다. 78도 시야각으로 넓은 화면을 담을 수 있으며, 오토포커스 및 자동 조명 보정 기능으로 편리하게 사용할 수 있습니다. ([https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE1oxNeLtEaTOaFT5Q5qorBPjDl-JO8dgIqgBHvQpV7PhO1uRBYmLKCy\\_lu-qLvHSXO-UyiLS0ou91O2FppCyuVNIdgT6rhZRW4dRIKO132ktj-CNyxGRvRbpglhm6LmM\\_Sq1AplB7wg52BLMlDldx7Y1T5ZmI=](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE1oxNeLtEaTOaFT5Q5qorBPjDl-JO8dgIqgBHvQpV7PhO1uRBYmLKCy_lu-qLvHSXO-UyiLS0ou91O2FppCyuVNIdgT6rhZRW4dRIKO132ktj-CNyxGRvRbpglhm6LmM_Sq1AplB7wg52BLMlDldx7Y1T5ZmI=))\n\n3.  **앱코 APC930 FHD 웹캠:**\n    *   프라이버시 커버와 페이스 추적 기능이 특징입니다. ([https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFTCD8jyoY\\_4tWtZsvhaK4sqsJ-r0nxJPJKUY8\\_Xm3XvjD5hKkb3gJLXaI24TCRC5H2B0LEyxn1dCTZDm2HoxVIGg4anaWs4W9tTL-LTaOGM0xIZ1ZPif345vbY](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFTCD8jyoY_4tWtZsvhaK4sqsJ-r0nxJPJKUY8_Xm3XvjD5hKkb3gJLXaI24TCRC5H2B0LEyxn1dCTZDm2HoxVIGg4anaWs4W9tTL-LTaOGM0xIZ1ZPif345vbY))\n\n4.  **로지텍 Brio 500:**\n    *   1080p 고화질과 다양한 시야각 조절, 자동 노출/화이트밸런스 보정 기능을 제공합니다. 실내외 어디서든 균일한 화질을 유지하며, 사용자가 직접 보기 좋은 화각을 설정할 수 있습니다. 프라이버시 셔터가 기본으로 탑재되어 있습니다. ([https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGfFcwypa2QYNDRH\\_RP2lkikOnNNIVNIOAMxKlwTW5TNqElW3Ckh71OQfyPFskYKmFHECBkT68Ftn4zjbt-mT3LF3nJFJ4wnflMSPkscNiDBT6uzsAd0j4=](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGfFcwypa2QYNDRH_RP2lkikOnNNIVNIOAMxKlwTW5TNqElW3Ckh71OQfyPFskYKmFHECBkT68Ftn4zjbt-mT3LF3nJFJ4wnflMSPkscNiDBT6uzsAd0j4=))\n\n5.  **앱코 APC940 FHD 웹캠:**\n    *   FHD 1080p 해상도와 60 프레임 지원으로 부드러운 화면을 제공합니다. 오토포커스 및 자동 밝기 조절 기능이 있으며, 듀얼 마이크와 프라이버시 커버가 내장되어 있어 개인 방송, 화상 회의, 비대면 수업 등 다양한 용도로 적합합니다. ([https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGl48Ag5eRcax8VrLI2tTKNtf39SyIO4C0Y90ns3ed99TtowjQ8OgcdgzEQ79l3kZMEweWWGKFGNRJTxTrwcJbKCezr1d-IJiVOIDzpJD7IAFuQSXJzVmfbyBoVxA==](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGl48Ag5eRcax8VrLI2tTKNtf39SyIO4C0Y90ns3ed99TtowjQ8OgcdgzEQ79l3kZMEweWWGKFGNRJTxTrwcJbKCezr1d-IJiVOIDzpJD7IAFuQSXJzVmfbyBoVxA==))",
   "sources": [],
-  "error": "Timeout"
+  "error": null
 }

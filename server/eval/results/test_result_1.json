@@ -1,13 +1,13 @@
 {
   "test_info": {
     "test_id": 1,
-    "timestamp": "2025-06-26T00:27:46.158286",
-    "response_time_ms": 88994.31,
-    "status_code": 200,
-    "success": true
+    "timestamp": "2025-06-26T01:20:41.228573",
+    "response_time_ms": 120165.24171829224,
+    "status_code": 0,
+    "success": false
   },
   "query": "10만원 이하 가성비 좋은 무선 이어폰 추천해줘",
-  "response": "## 10만원 이하 가성비 무선 이어폰 추천\n\n1.  **삼성전자 갤럭시 버즈 FE:** 5만원대로 삼성 기기와의 호환성이 뛰어나고, 무난한 노이즈 캔슬링 성능을 제공합니다. [https://link.coupang.com/a/cyUjit](https://link.coupang.com/a/cyUjit), [https://link.coupang.com/a/cyXb9b](https://link.coupang.com/a/cyXb9b) (출처: \\[4], \\[11], \\[17])\n2.  **QCY 멜로버즈 프로 (ANC 버전 포함):** 3만원대로 가성비가 뛰어난 노이즈 캔슬링(ANC)을 지원하며, 전용 앱을 통해 설정이 가능합니다. 최대 30시간 사용 가능합니다. [https://link.coupang.com/a/b34ZA4](https://link.coupang.com/a/b34ZA4), [https://link.coupang.com/a/cyUno8](https://link.coupang.com/a/cyUno8) (출처: \\[1], \\[2], \\[4])\n3.  **앤커 사운드코어 리버티 4 NC:** 8만원 ~ 10만원대로 밸런스 잡힌 성능과 개선된 통화 품질을 제공하며, 사용자 맞춤형 음향 조정이 가능합니다. 최대 40시간 사용 가능합니다. [https://link.coupang.com/a/bsmWeN](https://link.coupang.com/a/bsmWeN) (출처: \\[1], \\[2], \\[3])\n4.  **QCY T13 (ANC 2 포함):** 2만원대로 저렴한 가격에 무난한 성능을 제공합니다. [https://link.coupang.com/a/cyW9UY](https://link.coupang.com/a/cyW9UY), [https://link.coupang.com/a/cyXcku](https://link.coupang.com/a/cyXcku) (출처: \\[4])\n5.  **브리츠 4세대 노이즈 캔슬링 블루투스 이어폰:** 2만원대로, [https://link.coupang.com/a/cyXbVs](https://link.coupang.com/a/cyXbVs) 에서 구매할 수 있습니다.",
+  "response": "",
   "sources": [],
-  "error": null
+  "error": "Timeout"
 }
