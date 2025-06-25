@@ -1,4 +1,4 @@
-import { TrendingUp, ExternalLink, Clock, Users } from "lucide-react";
+import { TrendingUp, ExternalLink } from "lucide-react";
 
 const RelatedProducts = () => {
   const relatedPosts = [
@@ -20,12 +20,6 @@ const RelatedProducts = () => {
       views: "4.1k",
       date: "3일 전"
     }
-  ];
-
-  const recentComparisons = [
-    { product1: "아이폰 15", product2: "갤럭시 S24", time: "5분 전" },
-    { product1: "맥북 에어", product2: "LG 그램", time: "12분 전" },
-    { product1: "에어팟 프로", product2: "소니 WF-1000XM4", time: "18분 전" }
   ];
 
   return (
@@ -64,42 +58,6 @@ const RelatedProducts = () => {
             자세히 보기 →
           </button>
         </div>
-      </div>
-
-      {/* 실시간 비교 현황 섹션 */}
-      <div className="mb-6">
-        <div className="flex items-center space-x-2 mb-4">
-          <Clock className="w-5 h-5 text-green-500" />
-          <h3 className="text-md font-semibold text-gray-900">실시간 비교</h3>
-        </div>
-        
-        <div className="space-y-3">
-          {recentComparisons.map((comparison, index) => (
-            <div 
-              key={index}
-              className="p-3 rounded-lg bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors"
-            >
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center space-x-2">
-                  <Users className="w-3 h-3 text-gray-500" />
-                  <span className="text-xs text-gray-500">{comparison.time}</span>
-                </div>
-              </div>
-              <p className="text-sm text-gray-700">
-                <span className="font-medium">{comparison.product1}</span>
-                <span className="text-gray-400 mx-2">vs</span>
-                <span className="font-medium">{comparison.product2}</span>
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 더보기 버튼 */}
-      <div className="pt-4 border-t border-gray-200">
-        <button className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors">
-          더 많은 비교 보기 →
-        </button>
       </div>
     </div>
   );

@@ -181,15 +181,29 @@ def get_reflection_prompt(user_request: str, products: List, queries: List) -> L
         HumanMessage(content=f"다음 검색 결과를 분석하고 추가 검색이 필요한지 판단해주세요.")
     ]
 
-answer_instructions = """사용자의 질문에 대해 제공된 제품 정보를 바탕으로 고품질의 추천 답변을 생성해주세요.
+answer_instructions = """사용자의 질문에 대해 제공된 제품 정보를 바탕으로 간결하고 핵심적인 추천 답변을 생성해주세요.
 
 Instructions:
-- 현재 날짜는 {current_date}입니다.
-- 다단계 리서치 과정의 최종 단계임을 언급하지 마세요.
-- 이전 단계에서 수집된 모든 정보에 접근할 수 있습니다.
-- 사용자의 질문에 대해 제공된 제품 정보를 바탕으로 고품질의 답변을 생성하세요.
+- 바로 핵심 추천 제품들을 5개까지 제시하세요. 불필요한 인사말이나 과정 설명은 생략하세요.
+- 제품별로 명확한 추천 이유와 특징을 간결하게 설명하세요.
 - 제품 정보에서 사용한 출처를 답변에 올바르게 포함하세요. 마크다운 형식을 사용하세요 (예: [네이버 블로그](https://example.com)).
-- 한국어로 친근하고 전문적인 톤으로 작성하세요.
+- 한국어로 전문적이고 실용적인 톤으로 작성하세요.
+- "마무리", "기타 추천 제품", "참고사항" 등의 불필요한 섹션은 생략하세요.
+- 과도한 날짜 언급은 피하고, 필요한 경우에만 간단히 언급하세요.
+- 핵심 추천 제품들에만 집중하여 답변하세요.
+
+링크 관련 규칙:
+- 검색 결과에 실제 구매 링크나 제품 상세 링크가 있는 경우에만 포함하세요.
+- 임의로 링크를 생성하거나 "(예시)" 같은 가짜 표시를 하지 마세요.
+- 실제 링크가 없으면 구매 링크 섹션을 아예 생략하세요.
+- 출처 링크만 검색 결과에서 확인된 실제 링크를 사용하세요.
+- 문자열을 보고 정상적인 링크인지 판단하시고, 아닐 경우 링크를 생략하세요.
+
+Format:
+- 사용자 요청에 대한 직접적인 추천으로 시작
+- 각 제품별로 명확한 구성 (제품명, 가격대, 주요 특징, 추천 이유)
+- 간결하고 실용적인 정보 위주로 구성
+- 실제 존재하는 링크만 포함
 
 사용자 요청: {user_request}
 
@@ -198,9 +212,7 @@ Instructions:
 
 def get_answer_prompt(user_request: str, products_info: str) -> List:
     """최종 답변 생성을 위한 프롬프트"""
-    current_date = get_current_date()
     system_prompt = answer_instructions.format(
-        current_date=current_date,
         user_request=user_request,
         products_info=products_info
     )
@@ -208,4 +220,49 @@ def get_answer_prompt(user_request: str, products_info: str) -> List:
     return [
         SystemMessage(content=system_prompt),
         HumanMessage(content=f"다음 제품 정보를 바탕으로 사용자에게 추천 답변을 작성해주세요.")
+    ]
+
+# ========== 답변 검증 프롬프트 ==========
+
+answer_validation_instructions = """당신은 제품 추천 답변의 품질을 검증하는 전문 평가자입니다. 생성된 답변이 사용자 요청에 적절하고 유용한지 간결하게 평가해주세요.
+
+핵심 검증 기준:
+- 사용자가 요청한 제품 카테고리와 관련된 추천이 포함되어 있는가?
+- 제품 정보가 구체적이고 실용적인가?
+- 가격대, 특징, 추천 이유가 명확히 제시되어 있는가?
+- 답변이 사용자의 구매 결정에 도움이 되는가?
+- 모든 링크가 올바른 마크다운 형식 `[텍스트](URL)`로 작성되었는가?
+- 노출된 URL이나 잘못된 링크 형식이 없는가?
+
+CRITICAL: 다음과 같은 문제가 발견되면 반드시 is_valid: false로 판정하세요:
+
+1. 잘못된 링크 형식:
+   - `[[1]]`, `[[2]]`, `[1]`, `[2]` 등의 숫자 참조
+   - `(https://...)` 형태의 노출된 URL 
+   - `https://...` 형태의 노출된 URL
+   - `(예시)` 또는 유사한 가짜 표시
+
+2. 허용되는 형식:
+   - `[쿠팡](https://coupang.com)` ✅
+   - `[다나와](https://danawa.com)` ✅
+   - `[네이버 쇼핑](https://shopping.naver.com)` ✅
+
+Output Format:
+- Format your response as a JSON object with these exact keys:
+   - "is_valid": true or false (위 기준을 모두 충족하면 true, 아니면 false)
+   - "reason": 검증 결과의 간단한 이유 (한 문장)
+
+사용자 요청: {user_request}
+생성된 답변: {generated_answer}"""
+
+def get_answer_validation_prompt(user_request: str, generated_answer: str) -> List:
+    """답변 검증을 위한 프롬프트"""
+    system_prompt = answer_validation_instructions.format(
+        user_request=user_request,
+        generated_answer=generated_answer
+    )
+    
+    return [
+        SystemMessage(content=system_prompt),
+        HumanMessage(content=f"다음 답변의 품질을 평가하고 검증해주세요.")
     ]

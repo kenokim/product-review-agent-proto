@@ -19,7 +19,8 @@ from .prompts import (
     get_search_query_prompt,
     get_web_search_prompt,
     get_reflection_prompt,
-    get_answer_prompt
+    get_answer_prompt,
+    # get_answer_validation_prompt
 )
 from .state import (
     ProductRecommendationState,
@@ -29,7 +30,8 @@ from .config import ProductRecommendationConfig
 from .tools_and_schemas import (
     ValidationResult,
     SearchQueryResult,
-    ReflectionResult
+    ReflectionResult,
+    # AnswerValidationResult
 )
 
 load_dotenv()
@@ -287,6 +289,44 @@ def answer_generation(state: ProductRecommendationState, config: RunnableConfig)
         "response_to_user": final_content
     }
 
+# 6. 답변 검증
+# def validate_answer(state: ProductRecommendationState, config: RunnableConfig) -> dict:
+#     """생성된 답변의 품질을 검증하고 개선이 필요한지 판단합니다."""
+#     
+#     logger.info("[validate_answer] 노드 시작")
+#     
+#     configurable = ProductRecommendationConfig.from_runnable_config(config)
+#     
+#     # LLM 초기화
+#     llm = ChatGoogleGenerativeAI(
+#         model=configurable.validation_model,  # 검증용 모델 사용
+#         temperature=0.1,
+#         max_retries=2,
+#         api_key=os.getenv("GEMINI_API_KEY")
+#     )
+#     
+#     # 구조화된 출력을 위한 스키마 적용
+#     structured_llm = llm.with_structured_output(AnswerValidationResult)
+#     
+#     # 사용자 요청과 생성된 답변 추출
+#     user_message = get_latest_user_message(state["messages"])
+#     generated_answer = state.get("response_to_user", "")
+#     
+#     logger.info(f"[validate_answer] 답변 검증 중 - 답변 길이: {len(generated_answer)} 문자")
+#     
+#     # 검증 프롬프트 구성
+#     validation_prompt = get_answer_validation_prompt(user_message, generated_answer)
+#     
+#     # 검증 수행
+#     result = structured_llm.invoke(validation_prompt)
+#     
+#     logger.info(f"[validate_answer] 검증 완료 - 유효성: {result.is_valid}, 이유: {result.reason}")
+#     
+#     return {
+#         "answer_is_valid": result.is_valid,
+#         "answer_validation_reason": result.reason
+#     }
+
 def should_refine_or_search(state: ProductRecommendationState) -> str:
     """요청의 구체성에 따른 라우팅 결정"""
     decision = "search" if state.get("is_request_specific", False) else "refine"
@@ -309,6 +349,7 @@ def create_product_recommendation_graph():
     builder.add_node("web_search", web_search)
     builder.add_node("reflection", reflection)
     builder.add_node("answer_generation", answer_generation)
+    # builder.add_node("validate_answer", validate_answer)
     
     # 엣지 구성
     builder.add_edge(START, "validate_request")

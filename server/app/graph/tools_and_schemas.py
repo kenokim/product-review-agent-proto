@@ -37,6 +37,11 @@ class ReflectionResult(BaseModel):
     additional_queries: List[str] = Field(description="추가 검색어 목록")
     gap_analysis: str = Field(description="부족한 부분 분석")
 
+class AnswerValidationResult(BaseModel):
+    """답변 검증 결과 스키마"""
+    is_valid: bool = Field(description="답변이 적절한지 여부 (true/false)")
+    reason: str = Field(description="검증 결과의 간단한 이유")
+
 # ========== 도구 함수 ==========
 
 def validate_schema_result(result, schema_name: str) -> bool:
@@ -48,6 +53,8 @@ def validate_schema_result(result, schema_name: str) -> bool:
             return hasattr(result, 'queries') and hasattr(result, 'rationale')
         elif schema_name == "ReflectionResult":
             return hasattr(result, 'is_sufficient') and hasattr(result, 'additional_queries')
+        elif schema_name == "AnswerValidationResult":
+            return hasattr(result, 'is_valid') and hasattr(result, 'reason')
         return False
     except Exception:
         return False

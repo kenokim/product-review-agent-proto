@@ -37,6 +37,10 @@ class ProductRecommendationState(TypedDict):
     # 응답 데이터
     response_to_user: str
     
+    # 답변 검증 관련
+    answer_is_valid: bool
+    answer_validation_reason: str
+    
     # 설정값
     max_products: int
     search_depth: int
