@@ -21,6 +21,10 @@ python-dotenv>=1.0.0
 # Type hints support
 typing-extensions>=4.5.0
 
+# HTTP client for async requests
+aiohttp>=3.8.0
+aiofiles>=23.0.0
+
 # Optional: for development and testing
 pytest>=7.0.0
 pytest-asyncio>=0.21.0

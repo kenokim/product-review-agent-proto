@@ -68,8 +68,9 @@ pytest -v
 # validate_request 노드만 테스트
 pytest -k "validate_request" -v
 
-# 특정 제품 케이스만 테스트
-pytest -k "earphones" -v
+# 자동화된 API 테스트 실행
+cd eval
+python test_query_sender.py
 ```
 
 ### 테스트 커버리지 확인

@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 10,
+    "timestamp": "2025-06-26T00:31:37.238762",
+    "response_time_ms": 120566.09201431274,
+    "status_code": 0,
+    "success": false
+  },
+  "query": "휴대용 모니터 추천, 업무용으로 쓸건데 30만원 이내",
+  "response": "",
+  "sources": [],
+  "error": "Timeout"
+}

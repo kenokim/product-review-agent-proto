@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 6,
+    "timestamp": "2025-06-26T00:28:31.027595",
+    "response_time_ms": 44868.605852127075,
+    "status_code": 0,
+    "success": false
+  },
+  "query": "5만원 이하 가성비 좋은 게이밍 마우스 추천",
+  "response": "",
+  "sources": [],
+  "error": "[Errno 54] Connection reset by peer"
+}

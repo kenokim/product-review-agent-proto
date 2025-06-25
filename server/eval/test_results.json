@@ -1,0 +1,111 @@
+{
+  "test_summary": {
+    "total_tests": 10,
+    "successful_tests": 6,
+    "failed_tests": 4,
+    "average_response_time_ms": 73229.29,
+    "timestamp": "2025-06-26T00:31:37.241494"
+  },
+  "test_results": [
+    {
+      "test_id": 1,
+      "query": "10만원 이하 가성비 좋은 무선 이어폰 추천해줘",
+      "response": "## 10만원 이하 가성비 무선 이어폰 추천\n\n1.  **삼성전자 갤럭시 버즈 FE:** 5만원대로 삼성 기기와의 호환성이 뛰어나고, 무난한 노이즈 캔슬링 성능을 제공합니다. [https://link.coupang.com/a/cyUjit](https://link.coupang.com/a/cyUjit), [https://link.coupang.com/a/cyXb9b](https://link.coupang.com/a/cyXb9b) (출처: \\[4], \\[11], \\[17])\n2.  **QCY 멜로버즈 프로 (ANC 버전 포함):** 3만원대로 가성비가 뛰어난 노이즈 캔슬링(ANC)을 지원하며, 전용 앱을 통해 설정이 가능합니다. 최대 30시간 사용 가능합니다. [https://link.coupang.com/a/b34ZA4](https://link.coupang.com/a/b34ZA4), [https://link.coupang.com/a/cyUno8](https://link.coupang.com/a/cyUno8) (출처: \\[1], \\[2], \\[4])\n3.  **앤커 사운드코어 리버티 4 NC:** 8만원 ~ 10만원대로 밸런스 잡힌 성능과 개선된 통화 품질을 제공하며, 사용자 맞춤형 음향 조정이 가능합니다. 최대 40시간 사용 가능합니다. [https://link.coupang.com/a/bsmWeN](https://link.coupang.com/a/bsmWeN) (출처: \\[1], \\[2], \\[3])\n4.  **QCY T13 (ANC 2 포함):** 2만원대로 저렴한 가격에 무난한 성능을 제공합니다. [https://link.coupang.com/a/cyW9UY](https://link.coupang.com/a/cyW9UY), [https://link.coupang.com/a/cyXcku](https://link.coupang.com/a/cyXcku) (출처: \\[4])\n5.  **브리츠 4세대 노이즈 캔슬링 블루투스 이어폰:** 2만원대로, [https://link.coupang.com/a/cyXbVs](https://link.coupang.com/a/cyXbVs) 에서 구매할 수 있습니다.",
+      "sources": [],
+      "response_time_ms": 88994.31,
+      "status_code": 200,
+      "timestamp": "2025-06-26T00:27:46.158286",
+      "error": null
+    },
+    {
+      "test_id": 2,
+      "query": "대학생용 문서작업 노트북 추천, 예산 100만원 이내",
+      "response": "다음은 100만원 이내 예산으로 대학생이 문서 작업에 사용하기 좋은 노트북 5가지입니다.\n\n1.  **LG 울트라PC (다양한 모델)**\n    *   **가격대:** 60만원대 ~ 90만원대\n    *   **추천 이유:** LG 브랜드의 신뢰성과 가벼운 무게, 긴 배터리 수명으로 문서 작업 및 휴대성에 최적화되었습니다. [38 [dcinside](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHRePzEwmJ7yPWs194lehXxc1tE5J12b2W9tdwTjwkS-h5NRH6CeDyeccvU6dniSsPk8TaI-AE5k85oXFT5zLCBJqWEKAVpfMtwr48T3vN9T3NFA657Bi7Bt0tRUJ2pya7HMy49ZhfoesHr6W6gnI_dyXp6pSCvs5hvkYKaHOg=)]\n    *   **구매 링크:** [https://smartstore.naver.com/j\\_cns/products/6174236911](https://smartstore.naver.com/j_cns/products/6174236911) (예시: LG 울트라PC 라이젠 R5 모델)\n\n2.  **삼성 갤럭시북 (다양한 모델)**\n    *   **가격대:** 70만원대 ~ 100만원대\n    *   **추천 이유:** 삼성 브랜드의 신뢰도와 깔끔한 디자인, 삼성 기기와의 연동성이 강점입니다. 전국 AS가 가능하여 편리합니다. [6]\n    *   **구매 링크:** [https://www.coupang.com/](https://www.coupang.com/) (쿠팡에서 다양한 갤럭시북 모델 검색 가능)\n\n3.  **ASUS 비보북 (다양한 모델)**\n    *   **가격대:** 60만원대 ~ 70만원대\n    *   **추천 이유:** 최신 CPU와 대용량 저장 공간을 갖춘 실속형 노트북으로, 가성비가 뛰어나 대학생에게 인기가 많습니다. [6], [30]\n    *   **구매 링크:** [https://smartstore.naver.com/kindstoremal/products/11859352437](https://smartstore.naver.com/kindstoremal/products/11859352437) (예시: ASUS 비보북 라이젠5 모델)\n\n4.  **레노버 아이디어패드 Slim (다양한 모델)**\n    *   **가격대:** 85만원대 ~ 95만원대\n    *   **추천 이유:** 대화면과 고성능을 제공하며, AMD CPU를 통해 효율적인 멀티태스킹이 가능합니다. 디자인 관련 학과 학생이나 영상 감상용으로 적합합니다. [5], [6]\n    *   **구매 링크:** [https://www.coupang.com/](https://www.coupang.com/) (쿠팡에서 다양한 아이디어패드 Slim 모델 검색 가능)\n\n5.  **HP 노트북 15**\n    *   **가격대:** 55만원대 ~ 65만원대\n    *   **추천 이유:** 뛰어난 휴대성과 저렴한 가격으로 이동이 잦은 학생이나 보조 노트북으로 사용하기 좋습니다. [6]\n    *   **구매 링크:** [https://www.coupang.com/](https://www.coupang.com/) (쿠팡에서 HP 노트북 15 모델 검색 가능)",
+      "sources": [],
+      "response_time_ms": 26003.67,
+      "status_code": 200,
+      "timestamp": "2025-06-26T00:26:43.168010",
+      "error": null
+    },
+    {
+      "test_id": 3,
+      "query": "운동할 때 쓸 방수 기능 있는 무선 이어폰 추천",
+      "response": "운동할 때 쓰기 좋은 방수 무선 이어폰을 찾으시는군요! 다음은 추천 제품입니다.\n\n1.  **샥즈 (Shokz) 오픈핏/오픈런 프로 2:** 오픈형이라 주변 소리를 들으면서 운동할 수 있어 안전하고, 땀과 습기에 강해 운동에 최적화되었습니다. 가격대는 10만원 후반대에서 20만원대입니다 [3], [4], [11].\n2.  **사운드본 (SoundBone) 에어 SE01:** 골전도 방식이라 착용감이 편안하고 가벼워 러닝이나 라이딩에 좋습니다. 가격은 10만원 초반대입니다 [4], [18].\n3.  **QCY 멜로버즈 프로 ANC:** 가성비가 뛰어나고 노이즈 캔슬링 기능까지 있어 운동에 집중할 수 있습니다. 가격은 3만원대입니다 [1], [2], [11].\n4.  **블라우풍트/토조 오픈형 이어폰:** 오픈형이라 답답함이 덜하고, 통화 품질이 우수하며 저음이 탄탄합니다. 가격대는 7~8만원대입니다 [4].\n5.  **1MORE FIT SE / S30:** 스포츠에 특화된 오픈형 이어폰으로, 안전하게 음악을 들으면서 운동할 수 있습니다 [17].",
+      "sources": [],
+      "response_time_ms": 51867.11,
+      "status_code": 200,
+      "timestamp": "2025-06-26T00:27:09.031348",
+      "error": null
+    },
+    {
+      "test_id": 4,
+      "query": "20만원 이하 게이밍 기계식 키보드 추천해줘",
+      "response": "20만원 이하 게이밍 기계식 키보드를 찾으시는군요! 다음은 추천 제품입니다.\n\n1.  **독거미 F87 Pro / F108:** 6~7만원대의 뛰어난 가성비. 무선/유선 지원, 깔끔한 스테빌, 흡음제 내장으로 좋은 타건감을 제공합니다. F87 Pro (텐키리스) ([쿠팡](https://link.coupang.com/a/bNtWzZ), [네이버](https://smartstore.naver.com/funkeys/products/10524784401)), F108 (풀배열) ([쿠팡](https:// [youtube](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHlqP2_zZNN1ihsyh_PgY9Q0WPr3UXNxozPLcXW6b_h-uq4dOORw5KuWCZrJQREaJIu7tET-lhIQWSSHcmt3G8musWuDC4PltsqJNfs16PbwV3Y2uHZQTxjcJGQwjaXLV6dQxECsg==)link.coupang.com/a/b9asr0), [펀키스](https://smartstore.naver.com/funkeys/products/11003316171)) ([YouTube - 심플 Simple](https://www.youtube.com/watch?v=opsLq-jP_ls), [다나와](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQH42qa_u3uLu_KJj8C9x6sGcYbp7nm3L1re0U-Z_pvBwg6XTQUWNP10UkPTgFfZz8LlkOCtIORPvmG0EA3EzlMpLZKdorM8qukA6EyJHohP4syeQMGPUFf8YA==)).\n2.  **아콘 AK47:** 5~7만원대. 무선/유선 지원, 매력적인 타건감과 깔끔한 디자인이 특징입니다. 독거미 키보드가 질린다면 좋은 선택지입니다 ([프리플로우](https://brand.naver.com/preflow/products/11326029388), [쿠팡](https://link.coupang.com/a/ca1134), [YouTube - 심플 Simple](https://www.youtube.com/watch?v=opsLq-jP_ls)).\n3.  **AULA F99 독거미:** 유선 기계식 키보드로, LEOBOG 세이야 축 (리니어)과 RGB LED 백라이트를 제공합니다 ([컴퓨존](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGs-oPTTGuYxRBbin0PxzC6D1dAzjBfDrFF5x2NC_SLiE6yg9PQTekiMRyoFwpL4nN_7uZu4v8nlNkhjAHbDF4AnGsizvdCmFIVmuovxYOlTpJB0hUv5WSYqzW9pnWbPaKD8Na-7Zx28TL-L8KrteQvJfSFR7I9Ba2PavwEJaDoR0n0r9TbD2DCGr4luCO6gMe3zJOJa4dgfsPcko0RpcrKX_QG8EniYQ==)).\n4.  **레오보 Hi75:** 7만원대. 알루미늄 바디, 가스켓 마운트 방식, 노브(knob) 포함으로 묵직하고 좋은 타건감을 제공합니다 ([YouTube - 컴군](https://www.youtube.com/watch?v=B_jGfZZ_EqI)).\n5.  **AULA F87 PRO:** 텐키리스 키보드로, PBT 키캡과 이중사출, 3단계 높이 조절 기능을 제공합니다 ([노써치](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHf8tvuDlpDhKfz9LY2J6BO8dzOVEY78Op3xMWtB8ivVHKr2stpYNzVkrnNT_WtvbuMBCasnD8dbb_ypg8QX2oO20kb9mNBYlihK-8DP_6yHzawSape2y4qR2ZCEN-9H9LkJlIrUoo-FSMzlM-jCu-6ff4hK-gvUEsMbBKGKqs7deGVPuwua2pmxQuPfLTjFnqI)).",
+      "sources": [],
+      "response_time_ms": 107851.89,
+      "status_code": 200,
+      "timestamp": "2025-06-26T00:28:31.025973",
+      "error": null
+    },
+    {
+      "test_id": 5,
+      "query": "영상편집용 고성능 노트북 추천, 예산 200만원 대",
+      "response": "",
+      "sources": [],
+      "response_time_ms": 81994.33708190918,
+      "status_code": 0,
+      "timestamp": "2025-06-26T00:28:31.026978",
+      "error": "[Errno 54] Connection reset by peer"
+    },
+    {
+      "test_id": 6,
+      "query": "5만원 이하 가성비 좋은 게이밍 마우스 추천",
+      "response": "",
+      "sources": [],
+      "response_time_ms": 44868.605852127075,
+      "status_code": 0,
+      "timestamp": "2025-06-26T00:28:31.027595",
+      "error": "[Errno 54] Connection reset by peer"
+    },
+    {
+      "test_id": 7,
+      "query": "재택근무용 웹캠 추천, 화질 좋고 10만원 이내로",
+      "response": "",
+      "sources": [],
+      "response_time_ms": 120203.72915267944,
+      "status_code": 0,
+      "timestamp": "2025-06-26T00:30:31.236117",
+      "error": "Timeout"
+    },
+    {
+      "test_id": 8,
+      "query": "카메라 성능 좋은 스마트폰 추천, 예산 50만원 이하",
+      "response": "50만원 이하 예산으로 카메라 성능이 좋은 스마트폰을 찾으시는군요. 다음은 추천 제품입니다.\n\n1.  **삼성 갤럭시 A 시리즈 (A35, A55):** 20만원대부터 50만원대까지 다양한 가격대로, 삼성페이 지원, 고주사율, 5,000mAh 배터리 등 편의 기능이 뛰어납니다. A35는 S24와 유사한 디자인과 접사 기능이, A55는 알루미늄 프레임과 향상된 베이퍼 챔버가 특징입니다. 가성비가 뛰어나 학생이나 직장인에게 적합합니다. ([다나와](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQES7ZnVImHgBYWvnctLH4Kv5zkkrbWwzzorD7x9-hrNUz4GH8m0TbrqQqsOPr3-Y9H5RWTPlkfYkr3w5SKruLJhX13fEU8MDzE48_z7ec_MFlISqFlujWgKQB9s3dl21kpP27HsSVRG82i6UNlMJF9uEei9UfDQGA4x), [아정당](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFf_nNU-mpIpaCrEtBJVVtdBNZYAw1JhBcRlCDhDPeq6Hz4zP303M4DdDVPSid7oSGpRAMiQ555A7WABNOGT3Lvns7WDqToD5g-CtYCArehHWx7nnX2qD3APNjC8MdnTyee9JFHkVbRANXXeLTYkPuQ_yhGISAwmSRZb1Ok0ig5WOJ8Z3m2p0O_lKdaMaI1sMhWOmJUbE_TPPO-trM7_LMJN3mAwcX7LeYLFu7MRK0zlqgj8b8P0cbU4q2YMaleg2SQKg2CoBPqZzBERS_yooVdZPafziphObCVQJthaYXPGWHzk4PD8yDETYAIDaoCc0R4oVn-QJJQYVIeH_7lvYQhR33PI6idxNC0nen52teqIbW0MBvm1VRFxCXIAIhxSeGDleyX-lU1pHtWvjkUg1VtvN7eIdr8GOaDQIkMBfpo7Ekrf4pkikM))\n\n2.  **삼성 갤럭시 S24 FE:** 중고 또는 할인 구매 시 50만원 이하로 구매 가능하며, 인물 사진에 특화된 망원 렌즈와 AI 기능이 강점입니다. S24의 AI 기능을 대부분 사용할 수 있으며, 준 플래그십 수준의 카메라 성능을 제공합니다. ([가성비 자급제폰 비교](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFyMQFId2INo11O_ck814SxlVOAWNg0TBfkWSFoyNHFk0hui_cfp7gPkFpOJD0-lP2dQ76cIVMi3KLnOiXpVycMtZcr253MMbWDA59eoO8qt7c_IXhKJZ9sgcdBFk0su7ZT1z-Xdms4EpW4c1IO-VDOPchLc-POUSqgeErIzg6YpfEgdOj7QN_M14KOkEENWIUHHxVGAIMWgQ))\n\n3.  **애플 아이폰 16e:** 중고 또는 할인 구매 시 50만원 이하로 구매 가능하며, 휴대성과 빠른 속도, 아이폰 특유의 카메라 색감 표현이 장점입니다. ([가성비 자급제폰 비교](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFyMQFId2INo11O_ck814SxlVOAWNg0TBfkWSFoyNHFk0hui_cfp7gPkFpOJD0-lP2dQ76cIVMi3KLnOiXpVycMtZcr253MMbWDA59eoO8qt7c_IXhKJZ9sgcdBFk0su7ZT1z-Xdms4EpW4c1IO-VDOPchLc-POUSqgeErIzg6YpfEgdOj7QN_M14KOkEENWIUHHxVGAIMWgQ))\n\n4.  **샤오미 Redmi Note 13 Pro+:** 40만원대로 2억 화소 메인 카메라(OIS)와 120W 초고속 충전이 특징입니다. 뛰어난 카메라 성능과 빠른 충전 속도를 원하시면 좋은 선택입니다.\n\n5.  **모토로라 Moto G34 5G:** 18만원대로 매우 저렴한 가격에 5G, 8GB RAM, 120Hz 주사율을 지원합니다. 가성비를 최우선으로 고려한다면 추천합니다.",
+      "sources": [],
+      "response_time_ms": 99024.38,
+      "status_code": 200,
+      "timestamp": "2025-06-26T00:30:10.057662",
+      "error": null
+    },
+    {
+      "test_id": 9,
+      "query": "장시간 착용해도 편한 헤드셋 추천, 사무용으로 15만원 이하",
+      "response": "장시간 착용에도 편안한 15만원 이하 사무용 헤드셋으로 다음 제품들을 추천합니다.\n\n1.  **로지텍 G435 LIGHTSPEED:** 8~9만원대의 무선 헤드셋으로, 165g의 초경량 디자인과 LIGHTSPEED 무선 연결, 블루투스 지원이 특징입니다. 가벼운 무게와 긴 배터리 사용 시간 덕분에 장시간 착용에 적합합니다. [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGD90v2kIgHkjwzQDl17zMYGeK5SC8g1nV1K\\_rjtwjF99ZCJ2Vf9y-XPVNsyBaIfqUjZF4vo4CQE2sRvrlMKUJUfrN5GLle81mDP-9StTglxXHbejxDHhtTACfWsVjVpRQ3l8wEY2izVHQDpacmiFS472UKNa2ZcuNib8ahPVjJOXEiiH\\_XLr2FkopxPmoWTtbPpbUHwRvjzoCKCqn5jE\\_JaTR7U-1AEpZ6VsbbjEUxG3VLUXVfGDa4hx93zCfGqRFW3NIAKDWRKUTojvJXNIIBR1HSuq9Ap6LcX1NPwUCPj3rq1d9Vd39VTqVJLG079OQBbVhk9f-YRj1rmPlJwFiPvRDP4X\\_OZdNweqHY1UbIBnSHix8ElkcUaYAmsMNecCKtSZQwRCfAQJSkTpZ7RYdLXfUf67bnmcFYmJf-w\\_5G7WECK2gKMSZkcEJFyveIE0bYT6I8VzuQDBUJdUAcYrj3](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGD90v2kIgHkjwzQDl17zMYGeK5SC8g1nV1K_rjtwjF99ZCJ2Vf9y-XPVNsyBaIfqUjZF4vo4CQE2sRvrlMKUJUfrN5GLle81mDP-9StTglxXHbejxDHhtTACfWsVjVpRQ3l8wEY2izVHQDpacmiFS472UKNa2ZcuNib8ahPVjJOXEiiH_XLr2FkopxPmoWTtbPpbUHwRvjzoCKCqn5jE_JaTR7U-1AEpZ6VsbbjEUxG3VLUXVfGDa4hx93zCfGqRFW3NIAKDWRKUTojvJXNIIBR1HSuq9Ap6LcX1NPwUCPj3rq1d9Vd39VTqVJLG079OQBbVhk9f-YRj1rmPlJwFiPvRDP4X_OZdNweqHY1UbIBnSHix8ElkcUaYAmsMNecCKtSZQwRCfAQJSkTpZ7RYdLXfUf67bnmcFYmJf-w_5G7WECK2gKMSZkcEJFyveIE0bYT6I8VzuQDBUJdUAcYrj3)\n2.  **QCY H3:** 4~6만원대의 유선 헤드셋으로, 균형 잡힌 음질과 가볍고 내구성 좋은 디자인이 특징입니다. 합리적인 가격으로 음악 감상 및 영화 감상에 적합합니다. [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGD90v2kIgHkjwzQDl17zMYGeK5SC8g1nV1K\\_rjtwjF99ZCJ2Vf9y-XPVNsyBaIfqUjZF4vo4CQE2sRvrlMKUJUfrN5GLle81mDP-9StTglxXHbejxDHhtTACfWsVjVpRQ3l8wEY2izVHQDpacmiFS472UKNa2ZcuNib8ahPVjJOXEiiH\\_XLr2FkopxPmoWTtbPpbUHwRvjzoCKCqn5jE\\_JaTR7U-1AEpZ6VsbbjEUxG3VLUXVfGDa4hx93zCfGqRFW3NIAKDWRKUTojvJXNIIBR1HSuq9Ap6LcX1NPwUCPj3rq1d9Vd39VTqVJLG079OQBbVhk9f-YRj1rmPlJwFiPvRDP4X\\_OZdNweqHY1UbIBnSHix8ElkcUaYAmsMNecCKtSZQwRCfAQJSkTpZ7RYdLXfUf67bnmcFYmJf-w\\_5G7WECK2gKMSZkcEJFyveIE0bYT6I8VzuQDBUJdUAcYrj3](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGD90v2kIgHkjwzQDl17zMYGeK5SC8g1nV1K_rjtwjF99ZCJ2Vf9y-XPVNsyBaIfqUjZF4vo4CQE2sRvrlMKUJUfrN5GLle81mDP-9StTglxXHbejxDHhtTACfWsVjVpRQ3l8wEY2izVHQDpacmiFS472UKNa2ZcuNib8ahPVjJOXEiiH_XLr2FkopxPmoWTtbPpbUHwRvjzoCKCqn5jE_JaTR7U-1AEpZ6VsbbjEUxG3VLUXVfGDa4hx93zCfGqRFW3NIAKDWRKUTojvJXNIIBR1HSuq9Ap6LcX1NPwUCPj3rq1d9Vd39VTqVJLG079OQBbVhk9f-YRj1rmPlJwFiPvRDP4X_OZdNweqHY1UbIBnSHix8ElkcUaYAmsMNecCKtSZQwRCfAQJSkTpZ7RYdLXfUf67bnmcFYmJf-w_5G7WECK2gKMSZkcEJFyveIE0bYT6I8VzuQDBUJdUAcYrj3)\n3.  **레이저 BlackShark V2 X:** TriForce 드라이버, HyperClear 마이크, 240g 경량 디자인, 메모리폼 이어 쿠션이 특징입니다.\n    [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE-nzgKkwPe4MYNePU21j0KWRgf3uC6quF5sFsq8dkZ3Eg6PJETXXjff9Ldi7MNktxJWHI3ykLnQBRueDej3fUZ30nhMRLOg5S0JApXa7fNu6tT4r6cs1cijJJakdKBcyHhgb1fWdXyGOE4eqBSfrNSxhveziXunN7ImEkPFLJP0fB23k2fgrnelCCTLwRhKCzx6q9if8xn112xWb-U63bHeRw7cZ4qAVi2rmZ_3reGpJJA0qaXgg8N51nhvM6m9PKFeKsgn4JEytIbAdyeLbyaLd2HZoOwVYCyY5XvSLsqReOoUUmF4zwogop1ITiHJAaHY-ZOjkbGYAeohzVXRFW5vLov8iOpRfl6A46vPHCS3jlvZDzanr4I8BdhLbVIRk47_1onpECCyhbCzW2K-4RlxROG0zOqRVH8xPLPqraMt2VtDwD3NCopMvUQ_EOQuXe8DfhmL5O4v3fIpDTL6-WqNZuOt70QZclQVjs6Ecd-qbs=](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE-nzgKkwPe4MYNePU21j0KWRgf3uC6quF5sFsq8dkZ3Eg6PJETXXjff9Ldi7MNktxJWHI3ykLnQBRueDej3fUZ30nhMRLOg5S0JApXa7fNu6tT4r6cs1cijJJakdKBcyHhgb1fWdXyGOE4eqBSfrNSxhveziXunN7ImEkPFLJP0fB23k2fgrnelCCTLwRhKCzx6q9if8xn112xWb-U63bHeRw7cZ4qAVi2rmZ_3reGpJJA0qaXgg8N51nhvM6m9PKFeKsgn4JEytIbAdyeLbyaLd2HZoOwVYCyY5XvSLsqReOoUUmF4zwogop1ITiHJAaHY-ZOjkbGYAeohzVXRFW5vLov8iOpRfl6A46vPHCS3jlvZDzanr4I8BdhLbVIRk47_1onpECCyhbCzW2K-4RlxROG0zOqRVH8xPLPqraMt2VtDwD3NCopMvUQ_EOQuXe8DfhmL5O4v3fIpDTL6-WqNZuOt70QZclQVjs6Ecd-qbs=)\n4.  **소니 WH-CH520:** 7~9만원대로, 147g의 가벼운 무게와 푹신한 이어패드, 최대 50시간 배터리가 특징입니다. 소니 사운드 튜닝으로 장시간 편안하게 음악 감상이 가능합니다. [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEdsJKY11owh854TJZw1J6PCiNSFsV8-DVLa0phN9I0R0yLNPeg2xDfeBJDtMX2cZ9towEUvO65QDJIBIAWyvazUf6TINNEjmXTQLmhoO6ZqtmPAIk4RADP6\\_dH4R811hpIi4cULw2lxKxW](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEdsJKY11owh854TJZw1J6PCiNSFsV8-DVLa0phN9I0R0yLNPeg2xDfeBJDtMX2cZ9towEUvO65QDJIBIAWyvazUf6TINNEjmXTQLmhoO6ZqtmPAIk4RADP6_dH4R811hpIi4cULw2lxKxW)\n5.  **브리츠 K35GH 게이밍 헤드셋:** 높은 가성비, 선명한 음질, 편안한 착용감을 제공합니다. [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQETbCQEOkmtZRR4m4rig8YFmeqoONgGfDVThHLE7lmBAN2UZiB-zt0JMo9p-W3FWgNi-GuicHCaIGFYtrbq86wBB355X6zCM-UbTsNGgGUX1vbFLTvv1NilssOsFl-jOO8=](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQETbCQEOkmtZRR4m4rig8YFmeqoONgGfDVThHLE7lmBAN2UZiB-zt0JMo9p-W3FWgNi-GuicHCaIGFYtrbq86wBB355X6zCM-UbTsNGgGUX1vbFLTvv1NilssOsFl-jOO8=)",
+      "sources": [],
+      "response_time_ms": 65634.41,
+      "status_code": 200,
+      "timestamp": "2025-06-26T00:29:36.667960",
+      "error": null
+    },
+    {
+      "test_id": 10,
+      "query": "휴대용 모니터 추천, 업무용으로 쓸건데 30만원 이내",
+      "response": "",
+      "sources": [],
+      "response_time_ms": 120566.09201431274,
+      "status_code": 0,
+      "timestamp": "2025-06-26T00:31:37.238762",
+      "error": "Timeout"
+    }
+  ]
+}

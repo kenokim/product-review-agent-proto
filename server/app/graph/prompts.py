@@ -166,9 +166,15 @@ Example:
 현재 제품 목록:
 {products_summary}"""
 
-def get_reflection_prompt(user_request: str, products: List, queries: List) -> List:
+def get_reflection_prompt(user_request: str, products_or_summary, queries: List) -> List:
     """결과 평가를 위한 프롬프트"""
-    products_summary = "\n".join([f"- {p.get('name', '알 수 없음')}: {p.get('price_range', '가격 미상')}" for p in products[:5]])
+    # products가 리스트인지 문자열인지 확인
+    if isinstance(products_or_summary, list):
+        # 기존 로직: 제품 리스트에서 요약 생성
+        products_summary = "\n".join([f"- {p.get('name', '알 수 없음')}: {p.get('price_range', '가격 미상')}" for p in products_or_summary[:5]])
+    else:
+        # 새로운 로직: 이미 요약된 문자열 사용
+        products_summary = products_or_summary if products_or_summary else "검색 결과가 없습니다."
     
     system_prompt = reflection_instructions.format(
         user_request=user_request,
@@ -220,49 +226,4 @@ def get_answer_prompt(user_request: str, products_info: str) -> List:
     return [
         SystemMessage(content=system_prompt),
         HumanMessage(content=f"다음 제품 정보를 바탕으로 사용자에게 추천 답변을 작성해주세요.")
-    ]
-
-# ========== 답변 검증 프롬프트 ==========
-
-answer_validation_instructions = """당신은 제품 추천 답변의 품질을 검증하는 전문 평가자입니다. 생성된 답변이 사용자 요청에 적절하고 유용한지 간결하게 평가해주세요.
-
-핵심 검증 기준:
-- 사용자가 요청한 제품 카테고리와 관련된 추천이 포함되어 있는가?
-- 제품 정보가 구체적이고 실용적인가?
-- 가격대, 특징, 추천 이유가 명확히 제시되어 있는가?
-- 답변이 사용자의 구매 결정에 도움이 되는가?
-- 모든 링크가 올바른 마크다운 형식 `[텍스트](URL)`로 작성되었는가?
-- 노출된 URL이나 잘못된 링크 형식이 없는가?
-
-CRITICAL: 다음과 같은 문제가 발견되면 반드시 is_valid: false로 판정하세요:
-
-1. 잘못된 링크 형식:
-   - `[[1]]`, `[[2]]`, `[1]`, `[2]` 등의 숫자 참조
-   - `(https://...)` 형태의 노출된 URL 
-   - `https://...` 형태의 노출된 URL
-   - `(예시)` 또는 유사한 가짜 표시
-
-2. 허용되는 형식:
-   - `[쿠팡](https://coupang.com)` ✅
-   - `[다나와](https://danawa.com)` ✅
-   - `[네이버 쇼핑](https://shopping.naver.com)` ✅
-
-Output Format:
-- Format your response as a JSON object with these exact keys:
-   - "is_valid": true or false (위 기준을 모두 충족하면 true, 아니면 false)
-   - "reason": 검증 결과의 간단한 이유 (한 문장)
-
-사용자 요청: {user_request}
-생성된 답변: {generated_answer}"""
-
-def get_answer_validation_prompt(user_request: str, generated_answer: str) -> List:
-    """답변 검증을 위한 프롬프트"""
-    system_prompt = answer_validation_instructions.format(
-        user_request=user_request,
-        generated_answer=generated_answer
-    )
-    
-    return [
-        SystemMessage(content=system_prompt),
-        HumanMessage(content=f"다음 답변의 품질을 평가하고 검증해주세요.")
     ]

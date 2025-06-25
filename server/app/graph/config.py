@@ -12,9 +12,11 @@ class ProductRecommendationConfig(BaseModel):
     analysis_model: str = Field(default="gemini-2.0-flash", description="제품 분석용 모델")
     
     # 검색 설정
-    max_search_queries: int = Field(default=1, description="최대 검색어 수")
+    max_search_queries: int = Field(default=4, description="최대 검색어 수 (4개 요청)")
+    required_search_results: int = Field(default=3, description="필요한 최소 검색 결과 수 (빠른 3개 사용)")
     max_products_per_query: int = Field(default=5, description="검색어당 최대 제품 수")
     max_candidate_products: int = Field(default=10, description="최대 후보 제품 수")
+    search_timeout: int = Field(default=25, description="개별 검색 타임아웃 (초)")
     
     @classmethod
     def from_runnable_config(cls, config: Optional[RunnableConfig] = None) -> "ProductRecommendationConfig":

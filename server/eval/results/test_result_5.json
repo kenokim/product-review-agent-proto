@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 5,
+    "timestamp": "2025-06-26T00:28:31.026978",
+    "response_time_ms": 81994.33708190918,
+    "status_code": 0,
+    "success": false
+  },
+  "query": "영상편집용 고성능 노트북 추천, 예산 200만원 대",
+  "response": "",
+  "sources": [],
+  "error": "[Errno 54] Connection reset by peer"
+}

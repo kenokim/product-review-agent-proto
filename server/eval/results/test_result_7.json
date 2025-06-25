@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 7,
+    "timestamp": "2025-06-26T00:30:31.236117",
+    "response_time_ms": 120203.72915267944,
+    "status_code": 0,
+    "success": false
+  },
+  "query": "재택근무용 웹캠 추천, 화질 좋고 10만원 이내로",
+  "response": "",
+  "sources": [],
+  "error": "Timeout"
+}
