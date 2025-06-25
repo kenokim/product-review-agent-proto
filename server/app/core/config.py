@@ -17,9 +17,9 @@ class Settings(BaseSettings):
     max_search_loops: int = 2
     
     # 모델 설정
-    validation_model: str = "gemini-2.0-flash"
+    validation_model: str = "gemini-2.5-flash"
     search_model: str = "gemini-2.0-flash"
-    analysis_model: str = "gemini-2.0-flash"
+    analysis_model: str = "gemini-2.5-flash"
     
     # 데이터베이스 설정 (향후 확장용)
     database_url: Optional[str] = None

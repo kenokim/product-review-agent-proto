@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 19,
+    "timestamp": "2025-06-26T05:14:01.270304",
+    "response_time_ms": 3387.03,
+    "status_code": 200,
+    "success": true
+  },
+  "query": "태블릿 추천",
+  "response": "어떤 용도로 사용하실 건가요? (예: 학습용, 영상 시청용, 그림 그리기용 등) 예산은 어느 정도로 생각하시나요? 특별히 원하는 기능이 있으신가요?",
+  "sources": [],
+  "error": null
+}

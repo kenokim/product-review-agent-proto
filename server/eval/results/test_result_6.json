@@ -1,13 +1,13 @@
 {
   "test_info": {
     "test_id": 6,
-    "timestamp": "2025-06-26T01:22:42.228613",
-    "response_time_ms": 120998.21901321411,
-    "status_code": 0,
-    "success": false
+    "timestamp": "2025-06-26T05:08:18.430226",
+    "response_time_ms": 72801.37,
+    "status_code": 200,
+    "success": true
   },
   "query": "5만원 이하 가성비 좋은 게이밍 마우스 추천",
-  "response": "",
+  "response": "5만원 이하 가성비 게이밍 마우스를 찾으시는 사용자분께 다음 제품들을 추천합니다.\n\n*   **로지텍 G304 LIGHTSPEED**\n    *   **가격대:** 3만원대 (벌크), 4~5만원대 (일반)\n    *   **주요 특징:** 무선, HERO 센서 (최대 12,000 DPI), AA 배터리 1개로 최대 250시간 사용, 빠른 응답속도.\n    *   **추천 이유:** 뛰어난 가성비로 입문용 무선 마우스를 찾는 사용자에게 적합하며, FPS 게임에 유리합니다.\n    *   **출처:** [유튜브](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHuW3PK2npkQ5Iyw_E0_nFnBoDv4iaf_fThMbVnMS99iKx), [리뷰프로](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFEB_sqkykTjJ4zMCDxj-akhKfeabzTNPDXZraUf7d_iDYjImmvXTTiKHzMBBY0VM9hMVagknu_peK56vl54uNqR9xANDwh68Pp555iztMPovJkIupTlAxN63wgwhQZQtPaCZAd), [고레컨 - 티스토리](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGEhzUG92tIRVayd0Fhi68_c36N6TeJu4OQcmmIr_tM), [FPS 게임용 무선 마우스 추천](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHSI1CBcaRdEUJBw3TZTEp7upyQWqgcKTUQGf7LrMaUsIy88cLhV89X_m1U71mKKZxQhmT2E0d51UxllHGVrqQ2gOQ1nSG6U8naB8ju4vrbo4QdwwYmodLlmvc3), [퀘이사존](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGPP2sRsC7rdNRLPjJmNmRxWyHoGsubhIxg0MjW5ib0NLU6N-MX1Ya31r2uw0tTPXo-178EN9RHCIZeL7BckevlGzvwQwwi9xoN7pnsD6oDq03jtbSNjfBRvM-Nq4qt5KRLmXpemE1uLP3X)\n\n*   **VGN VXE R1 SE+ (잠자리 마우스)**\n    *   **가격대:** 3만원대 (1+1 행사 가격 기준)\n    *   **주요 특징:** 유무선 겸용, 51g/55g 초경량, PAW3395 SE 센서.\n    *   **추천 이유:** 매우 가벼운 무게와 뛰어난 가성비로 사무용 및 게임용 모두에 적합하다는 평가를 받습니다.\n    *   **출처:** [유튜브](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFYr1Sk56Yo_qWCknTDaSte0toBCO8P0h48p2AW9DBxQB2FwZ3XZya6p4a7wd0Vf2RQEnjp-PyrbGcSDDfYcgiCktVUWg-o0yIMYyDZE8j7bOfLVW8VUshrNLobiqQ4k-suoc7Ldg==)\n\n*   **로지텍 G102 2세대 LIGHTSYNC**\n    *   **가격대:** 2만원대\n    *   **주요 특징:** 유선, 가볍고 편안한 그립감, 게이밍에 적합한 성능.\n    *   **추천 이유:** 저렴한 가격에 로지텍의 안정적인 성능과 소프트웨어 지원을 받을 수 있어 PC방 마우스로도 인기가 많습니다.\n    *   **출처:** [DCoupas](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFGATRsRhAkno6-xWHtiCF7dsdXNYXQqV1-VGBQX3F4e4-YnfS5Sh0Dlg7FuqoOzSKi_miwGBQhsRPzF6y800EYPRrbpZYGg70TvejQx8V9d2OxtRe1KAVQ==)\n\n*   **맥스틸 TRON G10 PRO Reborn**\n    *   **가격대:** 5만원 이하 (가성비 라인으로 언급)\n    *   **주요 특징:** 유선, 빠른 반응속도, 무게추 적용 가능.\n    *   **추천 이유:** 빠른 반응속도를 선호하는 사용자에게 가성비 좋은 유선 옵션으로 고려할 만합니다.\n    *   **출처:** [리뷰프로](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFEB_sqkykTjJ4zMCDxj-akhKfeabzTNPDXZraUf7d_iDYjImmvXTTiKHzMBBY0VM9hMVagknu_peK56vl54uNqR9xANDwh68Pp555iztMPovJkIupTlAxN63wgwhQZQtPaCZAd), [킹가이드](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGvDhqcFVZn_FRVIPTbRN3WGAR4JwIoFkiNB18DA_I8Hma06ZM1jnpkw9u7DU0GJh5TlIHgDM_5eY5yN4fn-P3FpMZsNfd5qhV_khTHyVMLlTu5kUDXJXtrarC1sLDw38pJZbIh)\n\n*   **제닉스 타이탄 GV 에어**\n    *   **가격대:** 5만원 이하 (가성비 라인으로 언급)\n    *   **주요 특징:** 69g의 가벼운 무게, \"짭슈라\"로 불릴 만큼 지슈라와 유사한 디자인.\n    *   **추천 이유:** 초경량 마우스를 선호하며, 인기 모델과 유사한 그립감을 저렴하게 경험하고 싶은 사용자에게 적합합니다.\n    *   **출처:** [유튜브](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHuW3PK2npkQ5Iyw_E0_nFnBoDv4iaf_fThMbVnMS99iKx), [리뷰프로](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFEB_sqkykTjJ4zMCDxj-akhKfeabzTNPDXZraUf7d_iDYjImmvXTTiKHzMBBY0VM9hMVagknu_peK56vl54uNqR9xANDwh68Pp555iztMPovJkIupTlAxN63wgwhQZQtPaCZAd)",
   "sources": [],
-  "error": "Timeout"
+  "error": null
 }

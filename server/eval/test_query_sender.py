@@ -27,7 +27,7 @@ class TestQuerySender:
                  api_url: str = "http://localhost:8000/api/v1/chat",
                  test_case_file: str = "test_case.json",
                  output_file: str = "test_results.json",
-                 max_concurrent: int = 3):
+                 max_concurrent: int = 1):
         self.api_url = api_url
         self.test_case_file = Path(test_case_file)
         self.output_file = Path(output_file)
@@ -286,7 +286,7 @@ async def main():
         api_url="http://localhost:8000/api/v1/chat",
         test_case_file="test_case.json",
         output_file="test_results.json",
-        max_concurrent=3  # 동시 요청 수 제한
+        max_concurrent=1  # 동시 요청 수 제한
     )
     
     try:

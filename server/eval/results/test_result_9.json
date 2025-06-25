@@ -1,13 +1,13 @@
 {
   "test_info": {
     "test_id": 9,
-    "timestamp": "2025-06-26T01:24:43.225372",
-    "response_time_ms": 120993.56603622437,
-    "status_code": 0,
-    "success": false
+    "timestamp": "2025-06-26T05:11:59.752576",
+    "response_time_ms": 63928.78,
+    "status_code": 200,
+    "success": true
   },
   "query": "장시간 착용해도 편한 헤드셋 추천, 사무용으로 15만원 이하",
-  "response": "",
+  "response": "장시간 착용에도 편안한 15만원 이하 사무용 헤드셋으로 다음 제품들을 추천합니다.\n\n1.  **소니 WH-CH520**\n    *   **가격대:** 7만원 ~ 9만원대\n    *   **주요 특징:** 약 147g의 가벼운 무게, 푹신한 이어패드, 최대 50시간 사용 가능한 긴 배터리.\n    *   **추천 이유:** 가성비가 뛰어나며, 가벼운 무게와 편안한 이어패드로 장시간 착용 시 부담이 적습니다.\n    *   **출처:** [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQErnb5JpVm0K95URXPh2nF63DlYvHaCL2nPOF8SBZ0qLgpdDZXm57My0roYiAH86MzRLA0nOosoRPOs9DYas5VRUjnXOyYkm169KqIaKt2ci0xpVtjmLz22KumdeDaPUhQE9oKltWcTCLsx](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQErnb5JpVm0K95URXPh2nF63DlYvHaCL2nPOF8SBZ0qLgpdDZXm57My0roYiAH86MzRLA0nOosoRPOs9DYas5VRUjnXOyYkm169KqIaKt2ci0xpVtjmLz22KumdeDaPUhQE9oKltWcTCLsx)\n\n2.  **자브라 Evolve2 30**\n    *   **가격대:** 9만원 ~ 11만원대\n    *   **주요 특징:** 소음 제거 마이크 2개 탑재, 인체공학적 설계, Microsoft Teams 인증.\n    *   **추천 이유:** 화상 회의나 전화 통화 시 주변 소음을 효과적으로 줄여주고 음성 전달이 깨끗하여 사무용으로 매우 적합합니다.\n    *   **출처:** [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQErnb5JpVm0K95URXPh2nF63DlYvHaCL2nPOF8SBZ0qLgpdDZXm57My0roYiAH86MzRLA0nOosoRPOs9DYas5VRUjnXOyYkm169KqIaKt2ci0xpVtjmLz22KumdeDaPUhQE9oKltWcTCLsx](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQErnb5JpVm0K95URXPh2nF63DlYvHaCL2nPOF8SBZ0qLgpdDZXm57My0roYiAH86MzRLA0nOosoRPOs9DYas5VRUjnXOyYkm169KqIaKt2ci0xpVtjmLz22KumdeDaPUhQE9oKltWcTCLsx)\n\n3.  **앤커 Soundcore Life Q30**\n    *   **가격대:** 10만원 ~ 12만원대\n    *   **주요 특징:** 하이브리드 액티브 노이즈 캔슬링(ANC), 40mm 다이내믹 드라이버, EQ 설정 가능.\n    *   **추천 이유:** 뛰어난 노이즈 캔슬링 기능으로 집중이 필요한 사무 환경에 적합하며, 풍부한 사운드를 제공합니다.\n    *   **출처:** [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQErnb5JpVm0K95URXPh2nF63DlYvHaCL2nPOF8SBZ0qLgpdDZXm57My0roYiAH86MzRLA0nOosoRPOs9DYas5VRUjnXOyYkm169KqIaKt2ci0xpVtjmLz22KumdeDaPUhQE9oKltWcTCLsx](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQErnb5JpVm0K95URXPh2nF63DlYvHaCL2nPOF8SBZ0qLgpdDZXm57My0roYiAH86MzRLA0nOosoRPOs9DYas5VRUjnXOyYkm169KqIaKt2ci0xpVtjmLz22KumdeDaPUhQE9oKltWcTCLsx)\n\n4.  **QCY H3 무선 노이즈 캔슬링 블루투스 헤드셋**\n    *   **가격대:** 약 2만원대\n    *   **주요 특징:** 노이즈 캔슬링 기능, 부드러운 가죽 패드와 메모리 폼 쿠션, 최대 35시간 배터리.\n    *   **추천 이유:** 매우 뛰어난 가성비와 편안한 착용감으로 장시간 사용에도 귀와 머리에 부담이 적다는 평가를 받습니다.\n    *   **출처:** [Sarah pick 네이버 블로그](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHdi2kG4t9aCJxizvTIQbVzTXev6IiFMkmCCppoT36Dj78C97hoM27zQR2mV0xkw7xLNFq0J314aGZYHyJss5fKrYDws-0Z-7qBo9BrD6HIikU53dVEG4v77IyhntuKb4C7QQ-2Y_lw5bnqNnDiw8HGdB3IR_xtdPiWhn82hu_qGAvi5K9y6vYKGpboLcNVcUsB6A==)\n\n5.  **마이크로소프트 모던 USB-C 헤드셋**\n    *   **가격대:** (정보 없음, 다나와 가격 비교 필요)\n    *   **주요 특징:** 142g의 가벼운 무게, 소프트한 가죽 재질 쿠션형 이어컵, 유연한 접이식 고감도 마이크, USB-C 타입 연결, Microsoft Teams 앱 전용 버튼.\n    *   **추천 이유:** 가벼운 무게와 편안한 착용감으로 화상 회의가 잦은 사무 환경에 특히 적합하며, 깨끗한 음성 전달이 강점입니다.\n    *   **출처:** [https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG2-VxUoWO8spwpoHi_6D1bStIzsE_EY_fj6v76mQHYqMne0U1PGYgtnpRHVGxij1DkcrdRh7_kspfCf_SRhQxnca0Aee7God3Kt1me1CjsTdUsOo83_ijxk8aa-P5lRB9ThzFX](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG2-VxUoWO8spwpoHi_6D1bStIzsE_EY_fj6v76mQHYqMne0U1PGYgtnpRHVGxij1DkcrdRh7_kspfCf_SRhQxnca0Aee7God3Kt1me1CjsTdUsOo83_ijxk8aa-P5lRB9ThzFX)",
   "sources": [],
-  "error": "Timeout"
+  "error": null
 }

@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 20,
+    "timestamp": "2025-06-26T05:14:06.398122",
+    "response_time_ms": 5126.27,
+    "status_code": 200,
+    "success": true
+  },
+  "query": "프린터 사야 하는데",
+  "response": "어떤 용도로 사용하실 예정이신가요? (예: 가정용, 사무용, 사진 인쇄용 등) 그리고 예산은 어느 정도로 생각하시나요?",
+  "sources": [],
+  "error": null
+}

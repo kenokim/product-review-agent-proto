@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 11,
+    "timestamp": "2025-06-26T05:13:33.141226",
+    "response_time_ms": 2794.49,
+    "status_code": 200,
+    "success": true
+  },
+  "query": "키보드 추천해줘",
+  "response": "어떤 용도로 사용하실 키보드를 찾으시나요? (예: 게이밍, 사무용, 휴대용 등) 예산은 어느 정도 생각하고 계신가요?",
+  "sources": [],
+  "error": null
+}

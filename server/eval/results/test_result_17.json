@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 17,
+    "timestamp": "2025-06-26T05:13:54.105130",
+    "response_time_ms": 4842.75,
+    "status_code": 200,
+    "success": true
+  },
+  "query": "헤드셋이 필요해",
+  "response": "어떤 용도로 사용하실 건가요? (예: 게임, 음악 감상, 업무 등) 예산은 어느 정도로 생각하시나요? 특별히 원하는 기능이 있으신가요?",
+  "sources": [],
+  "error": null
+}

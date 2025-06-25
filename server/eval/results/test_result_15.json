@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 15,
+    "timestamp": "2025-06-26T05:13:46.115818",
+    "response_time_ms": 2353.21,
+    "status_code": 200,
+    "success": true
+  },
+  "query": "스마트폰 사고 싶어",
+  "response": "어떤 용도로 사용하실 건가요? (예: 게임, 사진 촬영, 업무용) 예산은 어느 정도로 생각하시나요? 특별히 선호하는 브랜드나 중요하게 생각하는 기능이 있으신가요?",
+  "sources": [],
+  "error": null
+}

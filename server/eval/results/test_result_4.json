@@ -1,13 +1,13 @@
 {
   "test_info": {
     "test_id": 4,
-    "timestamp": "2025-06-26T01:21:24.115508",
-    "response_time_ms": 114871.09,
+    "timestamp": "2025-06-26T05:05:56.808620",
+    "response_time_ms": 82737.7,
     "status_code": 200,
     "success": true
   },
   "query": "20만원 이하 게이밍 기계식 키보드 추천해줘",
-  "response": "다음은 20만원 이하 게이밍 기계식 키보드 추천입니다.\n\n1.  **콕스 게이트론 LED 게이밍 기계식 키보드 (황축/갈축):** 6~7만원대로 입문용이나 라이트 유저에게 적합하며, 게이트론 스위치를 사용하여 다양한 게임에 적합합니다. [[1]](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHDym3w6BfkXV3Uh3jKa1gCjIjyuEgc5laAqIxCNtLmzQt1eSWlI38TRK1868mqkoY7Wu-isjq5oHpJCLCd1BP6MvpPOKmfIyFy7zDJdr49tEOcl7FMAn9X0vk9PObR1I6yjZkfGFuVebkALjXnZTuntx2yaH4g6WAY-aGXI5pArLWf5XM=)\n2.  **하이퍼엑스 Alloy Origin Core RGB (적축):** 10만원대로 고급기에 가까운 키보드이며, 빠른 반응 속도와 높은 RGB 광량이 특징입니다. [[1]](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHDym3w6BfkXV3Uh3jKa1gCjIjyuEgc5laAqIxCNtLmzQt1eSWlI38TRK1868mqkoY7Wu-isjq5oHpJCLCd1BP6MvpPOKmfIyFy7zDJdr49tEOcl7FMAn9X0vk9PObR1I6yjZkfGFuVebkALjXnZTuntx2yaH4g6WAY-aGXI5pArLWf5XM=)\n3.  **COX CK420 축교환식 레인보우 LED 기계식 게이밍 키보드:** 3만원대로 화려한 RGB LED와 축 교환이 가능한 것이 특징입니다. [[6]](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEAF99YHMobMyhxlDzpOUlNtCxPQrKZunkORK-vxHlWozVc78N5siBbOn2Ul70Ul-q6IchVYsQrcWaZFvxJbPcW2L5JFnsKymwT0X1bs0KqfiX8nrkco9FRnYvoc3B1lpetJ9bd1S4=)\n4.  **에이투 텐키리스 기계식 게이밍 키보드:** 5만원대로 텐키리스와 풀배열 선택이 가능합니다. [[6]](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEAF99YHMobMyhxlDzpOUlNtCxPQrKZunkORK-vxHlWozVc78N5siBbOn2Ul70Ul-q6IchVYsQrcWaZFvxJbPcW2L5JFnsKymwT0X1bs0KqfiX8nrkco9FRnYvoc3B1lpetJ9bd1S4=)\n5.  **로지텍 G413 SE LED 유선 게이밍 키보드:** 6~7만원대로 가성비가 좋으며, 풀배열/텐키리스 선택이 가능합니다. [[1]](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHDym3w6BfkXV3Uh3jKa1gCjIjyuEgc5laAqIxCNtLmzQt1eSWlI38TRK1868mqkoY7Wu-isjq5oHpJCLCd1BP6MvpPOKmfIyFy7zDJdr49tEOcl7FMAn9X0vk9PObR1I6yjZkfGFuVebkALjXnZTuntx2yaH4g6WAY-aGXI5pArLWf5XM=)",
+  "response": "20만원 이하 게이밍 기계식 키보드를 찾으시는군요. 다음은 제공된 제품 정보를 바탕으로 추천하는 5가지 모델입니다.\n\n*   **레이니, 아이니 (정발 버전)**\n    *   **가격대:** 20만원 이하\n    *   **주요 특징:** 타건감이 좋으며, 75 배열을 채택했습니다.\n    *   **추천 이유:** 커뮤니티에서 타건감으로 호평받는 제품으로, 뛰어난 키감을 중시하는 사용자에게 적합합니다.\n    *   **출처:** 디시인사이드 기계식키보드 마이너 갤러리\n\n*   **COX 게이트론 LED 게이밍 기계식 키보드**\n    *   **가격대:** 6~7만원대\n    *   **주요 특징:** 입문용 및 라이트 유저에게 적합하며, 게이트론 스위치(황축, 갈축 등)를 사용합니다.\n    *   **추천 이유:** 10만원 미만의 저렴한 가격대에서 게이트론 스위치의 키감을 경험할 수 있는 가성비 좋은 입문용 키보드입니다.\n    *   **출처:** YouTube\n\n*   **타이폰 마르스프로**\n    *   **가격대:** 165,000원\n    *   **주요 특징:** 체리 적축 스위치를 사용하며, 타건음, 타건감, 스테빌라이저 퀄리티가 우수합니다.\n    *   **추천 이유:** 10만원 중반대에서 체리 적축의 안정적인 키감과 전반적으로 높은 빌드 퀄리티를 제공하여 만족도가 높습니다.\n    *   **출처:** 디시인사이드 기계식키보드 마이너 갤러리\n\n*   **AULA F시리즈 (독거미)**\n    *   **가격대:** 5만원대 (F87 Pro / F108은 10만원 미만)\n    *   **주요 특징:** 무선 기능을 지원하며, 좋은 타건감과 감성적인 디자인이 특징입니다. 키감과 타건감에 중점을 둔 모델입니다.\n    *   **추천 이유:** 10만원 미만의 가격대에서 무선 기능과 뛰어난 타건감을 동시에 제공하는 가성비 좋은 무선 키보드를 찾는 분께 추천합니다.\n    *   **출처:** 사용후기™\n\n*   **QSENN Q104 LCD 풀윤활 가스켓 유무선 블루투스 기계식 키보드**\n    *   **가격대:** 59,800원\n    *   **주요 특징:** 풀윤활 처리된 스위치, 가스켓 마운트 방식, 유무선 블루투스 연결, LCD 디스플레이를 지원합니다.\n    *   **추천 이유:** 5만원대라는 합리적인 가격에 풀윤활, 가스켓 마운트, 유무선 등 고급 키보드에서 볼 수 있는 다양한 기능을 갖춘 뛰어난 가성비 모델입니다.\n    *   **출처:** 뽐뿌",
   "sources": [],
   "error": null
 }

@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 18,
+    "timestamp": "2025-06-26T05:13:57.881123",
+    "response_time_ms": 3773.59,
+    "status_code": 200,
+    "success": true
+  },
+  "query": "웹캠 뭐 쓸까?",
+  "response": "어떤 용도로 사용하실 웹캠을 찾으시나요? (예: 화상 회의, 온라인 수업, 스트리밍 등) 예산은 어느 정도 생각하고 계신가요? 특별히 필요한 기능이 있으신가요?",
+  "sources": [],
+  "error": null
+}

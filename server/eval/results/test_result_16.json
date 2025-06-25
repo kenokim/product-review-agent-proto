@@ -1,0 +1,13 @@
+{
+  "test_info": {
+    "test_id": 16,
+    "timestamp": "2025-06-26T05:13:49.260538",
+    "response_time_ms": 3142.63,
+    "status_code": 200,
+    "success": true
+  },
+  "query": "모니터 추천해줘",
+  "response": "어떤 용도로 사용하실 모니터인가요? (예: 게임, 사무, 디자인 등) 예산은 어느 정도로 생각하시나요? 아니면 특별히 원하는 기능이 있으신가요?",
+  "sources": [],
+  "error": null
+}

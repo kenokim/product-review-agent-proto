@@ -1,13 +1,13 @@
 {
   "test_info": {
     "test_id": 1,
-    "timestamp": "2025-06-26T01:20:41.228573",
-    "response_time_ms": 120165.24171829224,
-    "status_code": 0,
-    "success": false
+    "timestamp": "2025-06-26T05:01:41.309395",
+    "response_time_ms": 55740.72,
+    "status_code": 200,
+    "success": true
   },
   "query": "10만원 이하 가성비 좋은 무선 이어폰 추천해줘",
-  "response": "",
+  "response": "10만원 이하 가성비 좋은 무선 이어폰으로 다음 제품들을 추천합니다.\n\n*   **QCY 멜로버즈 프로/프로 플러스 ANC**\n    *   **가격대:** 3만원 ~ 5만원 이하\n    *   **주요 특징:** 액티브 노이즈 캔슬링(ANC), 전용 앱 지원, 프로 플러스 HT08 모델은 LDAC 코덱 및 Hi-Res 인증 지원.\n    *   **추천 이유:** 가격 대비 뛰어난 노이즈 캔슬링 성능과 준수한 음질 및 통화 품질을 제공하여 가성비가 매우 좋습니다.\n    *   **출처:** [[1], [2], [5]], [구스픽스](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGhgeP7NIcxKGeYbh_04RRVCD0Y5vum7NumEjZhNm3l0TO2yZ2-fhzuo10-UsmHbdjXkeWW5ZUh70ORTEhTCECQtTK3VsfEGufPguV Ajjq9zTaO6_oUM6k8UMaT1o_mUHUD_-qPSXC_rgU-OIh-d7NL7l5496e-D-tls1UYL_0aePBIwNWzai7IUorCIXoNLEikNf7Qs6HXpjvbHmHCZI275V48s7GZ81j1DgoD2fDORMnt6F9vPswMObkZtr3ZpJ-GZJfyg5DyNpEnzx_m1D_UX-UBTQ5DB8xMXU0EeG5qhnjAgHpIiWSrjzlNvra2hxnQ0TsY_ew4sVvWgP-ubI0=), [골사투 - 티스토리](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHex30H-k3pMBVm4jXmixlrWWuVHmylAsEmyenpFYtf3BLUlovCauHaytJS6-wsk68CIqgbq0p53mnAXMI77M5vKDVYhGik2WmDbd15csfzWKNboGDDBjorc0w=)\n    *   **구매 링크:** [https://link.coupang.com/a/b34ZA4](https://link.coupang.com/a/b34ZA4)\n\n*   **앤커 사운드코어 리버티 4 NC**\n    *   **가격대:** 8만원 ~ 11만원 (행사 시 10만원 이하 구매 가능성 있음)\n    *   **주요 특징:** 전용 앱 지원, 맞춤형 사운드(HearID 기능), 6채널 마이크 시스템.\n    *   **추천 이유:** 균형 잡힌 성능과 개선된 통화 품질을 제공하며, ANC 및 투명 모드 등 다양한 기능을 지원합니다.\n    *   **출처:** [[1], [2], [4]], [구스픽스](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGhgeP7NIcxKGeYbh_04RRVCD0Y5vum7NumEjZhNm3l0TO2yZ2-fhzuo10-UsmHbdjXkeWW5ZUh70ORTEhTCECQtTK3VsfEGufPguV Ajjq9zTaO6_oUM6k8UMaT1o_mUHUD_-qPSXC_rgU-OIh-d7NL7l5496e-D-tls1UYL_0aePBIwNWzai7IUorCIXoNLEikNf7Qs6HXpjvbHmHCZI275V48s7GZ81j1DgoD2fDORMnt6F9vPswMObkZtr3ZpJ-GZJfyg5DyNpEnzx_m1D_UX-UBTQ5DB8xMXU0EeG5qhnjAgHpIiWSrjzlNvra2hxnQ0TsY_ew4sVvWgP-ubI0=)\n\n*   **삼성 갤럭시 버즈 FE**\n    *   **가격대:** 5만원대 (최저가 기준)\n    *   **주요 특징:** 삼성 기기와의 뛰어난 호환성.\n    *   **추천 이유:** 삼성 기기 사용자에게 최적화된 사용 경험을 제공하며, 가격 대비 무난한 성능을 보여줍니다.\n    *   **출처:** [[8], [14], [19]], [예하 (YouTube)](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF5JgAiEIwtDwONhKKvixi_1fkStozdSqcJ9Ywb7ZsfecxBClHfsstFkUV29Jw5TVGMUn1mYKqNkI47noWCCSTtqT_R4hVYd6aaVwRS-9qj0K_-nNq58zNAYCTVWjZ1mLkWvPNTIHg=)\n\n*   **QCY T13**\n    *   **가격대:** 2만원대\n    *   **주요 특징:** 블루투스 5.3, 최대 40시간 재생(케이스 포함), EQ 앱 지원.\n    *   **추천 이유:** 매우 뛰어난 가성비를 자랑하며, 앱 연동을 통한 EQ 조절이 가능하여 입문용 또는 서브 이어폰으로 적합합니다.\n    *   **출처:** [[3], [8]], [골사투 - 티스토리](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHS4l_oMY9RXjeyDVSIbGfyXYsgVI910Yo098MwvLEDjj-AZx_doA8w2rZHlYL4aj9v2yyIRd2o5glroCGpxaLtmsrIjkunIy6G-JgvE-ILskPxOVXRiPSL7Aih)\n\n*   **1MORE Q20K**\n    *   **가격대:** 4만원대 후반\n    *   **주요 특징:** 자연스러운 저음과 튀지 않는 고음, 우수한 착용감, 깔끔한 무광 화이트 디자인.\n    *   **추천 이유:** 전체적인 음질 밸런스가 뛰어나며, 불필요한 기능 없이 핵심에 집중한 제품입니다.\n    *   **출처:** [구스픽스](https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE6Bkdo3Wd43x5kofNosuUVw7WkkuZgsr0uAb_0D-gN7rqDhb1uy-BuikVVle4R2o88VIuQKgwawWyoP7mi2-Rp0uRQLx4P9tjohDOR7NG2Vjq7eGBLOwKCs51D4-yF5UB65_IHiaMetykfjLXckjGqhjoMGwEixqaEQIM1Q371vgiYKd7mNortITg9_ptsbrLqj1FEbGXib_iB8B9z3YxGzzGELMS2TAm9CHt315xcTx5R3VkbliGhcj_YUqfGsE2ISgHJTVbz3zCMMYp5ryHuPgUs-pAGnwynXACKCSsYxMkH50q_RyuvyIOOuhHCSl0X3vI6jM41flRzzvuYgVJk)",
   "sources": [],
-  "error": "Timeout"
+  "error": null
 }
