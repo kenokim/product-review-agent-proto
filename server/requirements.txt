@@ -6,6 +6,7 @@ langchain-google-genai
 
 # Google AI dependencies
 google-generativeai
+google-genai
 
 # FastAPI and web server dependencies
 fastapi>=0.104.0

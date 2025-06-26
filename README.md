@@ -2,6 +2,9 @@
 
 ![제품 추천 플랫폼](screenshot.png)
 
+## docker compose
+- GEMINI_API_KEY="<YOUR_GEMINI_API_KEY>" docker-compose up --build
+
 ## 기능 개요
 - 사용자가 구체적인 제품 검색 요청을 할 경우 웹 검색 결과를 출처와 함께 응답한다.
 - 구체적이지 않을 경우 구체화를 요구한다.`

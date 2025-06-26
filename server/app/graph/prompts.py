@@ -27,11 +27,13 @@ Instructions:
 - "키보드 추천해줘"
 - "좋은 노트북 알려줘"
 - "이어폰 뭐가 좋을까?"
+- "화장품 추천해줘"
 
 충분한 요청 예시:
 - "10만원 이하 가성비 좋은 게이밍 키보드 추천해줘"
 - "대학생용 문서작업 노트북 추천, 예산 100만원"
 - "운동할 때 쓸 무선 이어폰, 방수 기능 있는 걸로"
+- "저렴한 스킨케어 제품 추천해줘"
 
 Output Format:
 - Format your response as a JSON object with these exact keys:
