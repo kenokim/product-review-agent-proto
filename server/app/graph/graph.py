@@ -1,12 +1,14 @@
 import os
 import logging
 from dotenv import load_dotenv
+from typing import Any, Dict
 
 # LangGraph 관련
 from langgraph.graph import StateGraph, START, END
 from langgraph.types import Send
 from langchain_core.runnables import RunnableConfig
 from langchain_core.messages import AIMessage
+from langgraph.checkpoint.memory import MemorySaver
 
 # LLM 관련
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -333,7 +335,61 @@ def create_product_recommendation_graph():
     
     logger.info("제품 추천 그래프 생성 완료")
     
-    return builder.compile()
+    # InMemorySaver로 멀티턴 대화 상태를 저장
+    memory_saver = MemorySaver()
+    return builder.compile(checkpointer=memory_saver)
 
 # 그래프 인스턴스 생성
 graph = create_product_recommendation_graph()
+
+# =========================
+# stream_log 기반 로깅 헬퍼
+# =========================
+
+def invoke_with_logging(
+    input_state: Dict[str, Any],
+    config: RunnableConfig | None = None,
+) -> Dict[str, Any]:
+    """그래프를 실행하면서 LangGraph `stream_log` 로 각 단계 로그를 남깁니다.
+
+    docs/backend/6_langchain_logging.md 의 5번 섹션(`stream_log`) 패턴을 따릅니다.
+    LangSmith 없이도 각 노드의 실행 순서·출력을 실시간으로 확인할 수 있습니다.
+
+    Parameters
+    ----------
+    input_state : Dict[str, Any]
+        그래프에 전달할 초기 State 값.
+    config : RunnableConfig | None, optional
+        LangGraph 실행 설정. thread_id 등 전달.
+
+    Returns
+    -------
+    Dict[str, Any]
+        graph.invoke 의 최종 결과.
+    """
+    if config is None:
+        config = {}
+
+    logger.info("[invoke_with_logging] stream_log 시작")
+
+    # stream_log (최신 LangGraph) 또는 stream(..., stream_mode="log") 2가지 방식을 지원
+    if hasattr(graph, "stream_log"):
+        log_iterator = graph.stream_log(input_state, config)
+    else:
+        # 구버전 LangGraph 호환: stream(..., stream_mode="log") 사용
+        log_iterator = graph.stream(input_state, config, stream_mode="log")
+
+    for log_record in log_iterator:
+        op = getattr(log_record, "op", "-")
+        path = getattr(log_record, "path", "-")
+        data = getattr(log_record, "data", {})
+
+        if isinstance(data, dict) and "final_output" in data:
+            logger.info(
+                f"[stream_log] OP={op}, PATH={path}, OUTPUT preview={str(data['final_output'])[:120]}"
+            )
+        else:
+            logger.info(f"[stream_log] OP={op}, PATH={path}")
+
+    logger.info("[invoke_with_logging] stream_log 완료, graph.invoke 실행")
+    return graph.invoke(input_state, config)

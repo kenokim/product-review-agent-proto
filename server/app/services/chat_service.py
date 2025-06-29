@@ -4,7 +4,7 @@ import logging
 from typing import Dict, Any, List
 from langchain_core.runnables import RunnableConfig
 
-from app.graph.graph import graph
+from app.graph.graph import graph, invoke_with_logging
 from app.schemas.chat_schema import ChatRequest, ChatResponse, SourceInfo
 from app.core.config import settings
 
@@ -50,6 +50,7 @@ class ChatService:
             "analysis_model": settings.analysis_model,
             "max_search_queries": request.max_search_queries or settings.max_search_queries,
             "max_search_loops": request.max_search_loops or settings.max_search_loops,
+            "thread_id": thread_id,  # Checkpointer가 인식할 수 있도록 추가
         }
         
         config = RunnableConfig(
@@ -67,8 +68,8 @@ class ChatService:
             "messages": [{"role": "user", "content": message}]
         }
         
-        # 그래프 실행
-        result = self.graph.invoke(initial_state, config)
+        # stream_log 기반 실행 (invoke_with_logging 사용)
+        result = invoke_with_logging(initial_state, config)
         
         return result
     

@@ -201,193 +201,85 @@ def validation_node(state: Dict[str, Any]) -> Dict[str, Any]:
     return {**state, "validation": validation_result}
 ```
 
-## 5. 통합 로깅 패턴
+## 5. LangSmith 없이 간단하게 로깅하기 (`stream_log`)
 
-### 5.1 그래프 레벨 로깅
+LangSmith 설정을 하지 않고도 LangGraph의 실행 흐름을 디버깅하고 싶을 때, `stream_log` 메서드를 사용하면 매우 간단하게 각 노드의 실행 과정을 추적할 수 있습니다.
 
-```python
-class GraphLogger:
-    """그래프 전체의 로깅을 관리하는 클래스"""
-    
-    def __init__(self, graph_name: str):
-        self.graph_name = graph_name
-        self.start_time = None
-        self.node_times = {}
-    
-    def log_graph_start(self, initial_state: Dict[str, Any]):
-        """그래프 실행 시작 로깅"""
-        self.start_time = time.time()
-        logger.info(f"=== {self.graph_name} 실행 시작 ===")
-        logger.info(f"초기 상태: {list(initial_state.keys())}")
-    
-    def log_node_execution(self, node_name: str, before_state: Dict, after_state: Dict):
-        """각 노드 실행 로깅"""
-        node_start = time.time()
-        
-        # 노드별 실행 시간 기록
-        if node_name not in self.node_times:
-            self.node_times[node_name] = []
-        
-        execution_time = time.time() - node_start
-        self.node_times[node_name].append(execution_time)
-        
-        logger.info(f"[{node_name}] 실행 완료 - {execution_time:.2f}초")
-        
-        # 상태 변화 요약
-        new_keys = set(after_state.keys()) - set(before_state.keys())
-        if new_keys:
-            logger.info(f"[{node_name}] 새로운 상태 키: {new_keys}")
-    
-    def log_graph_complete(self, final_state: Dict[str, Any]):
-        """그래프 실행 완료 로깅"""
-        total_time = time.time() - self.start_time
-        
-        logger.info(f"=== {self.graph_name} 실행 완료 ===")
-        logger.info(f"총 실행 시간: {total_time:.2f}초")
-        logger.info(f"최종 상태: {list(final_state.keys())}")
-        
-        # 노드별 성능 요약
-        for node_name, times in self.node_times.items():
-            avg_time = sum(times) / len(times)
-            logger.info(f"[{node_name}] 평균 실행 시간: {avg_time:.2f}초 ({len(times)}회 실행)")
+`stream_log`는 그래프 실행의 모든 단계를 스트리밍으로 반환하며, 각 단계(op)의 이름, 경로(path), 그리고 노드의 최종 출력(final_output) 등을 포함한 로그 객체를 제공합니다.
 
-# 사용 예시
-graph_logger = GraphLogger("product_research_graph")
+### 5.1 사용 예제
 
-def execute_graph_with_logging(initial_state: Dict[str, Any]):
-    graph_logger.log_graph_start(initial_state)
-    
-    # 그래프 실행 로직
-    result = graph.invoke(initial_state)
-    
-    graph_logger.log_graph_complete(result)
-    
-    return result
-```
-
-## 6. 실제 적용 예시
-
-### 6.1 제품 리서치 에이전트 로깅
+아래는 `stream_log`를 사용하여 그래프의 실행 과정을 로깅하는 간단한 예제 코드입니다.
 
 ```python
-def product_research_logging_example():
-    """실제 제품 리서치 에이전트에서의 로깅 적용"""
-    
-    @log_execution_time
-    def search_queries_generation_node(state: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info("=== 검색어 생성 노드 시작 ===")
-        
-        user_query = state.get("messages", [])[-1].get("content", "")
-        logger.info(f"사용자 질의: {user_query}")
-        
-        # 검색어 생성 로직
-        search_queries = generate_search_queries(user_query)
-        
-        logger.info(f"생성된 검색어 수: {len(search_queries)}")
-        for i, query in enumerate(search_queries, 1):
-            logger.info(f"검색어 {i}: {query}")
-        
-        return {**state, "search_queries": search_queries}
-    
-    @log_execution_time
-    def web_search_node(state: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info("=== 웹 검색 노드 시작 ===")
-        
-        search_queries = state.get("search_queries", [])
-        all_results = []
-        
-        for i, query in enumerate(search_queries, 1):
-            logger.info(f"검색 {i}/{len(search_queries)}: {query}")
-            
-            try:
-                results = perform_web_search(query)
-                all_results.extend(results)
-                logger.info(f"검색 결과: {len(results)}개 수집")
-                
-            except Exception as e:
-                logger.error(f"검색 실패: {str(e)}")
-        
-        logger.info(f"총 수집된 결과: {len(all_results)}개")
-        
-        return {**state, "web_research_result": all_results}
-    
-    @log_execution_time
-    def analysis_node(state: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info("=== 분석 노드 시작 ===")
-        
-        search_results = state.get("web_research_result", [])
-        logger.info(f"분석할 결과 수: {len(search_results)}")
-        
-        # 분석 로직
-        analysis = analyze_search_results(search_results)
-        
-        logger.info("분석 완료")
-        logger.info(f"주요 키워드: {analysis.get('keywords', [])}")
-        logger.info(f"신뢰도: {analysis.get('confidence', 0)}")
-        
-        return {**state, "analysis_result": analysis}
+import operator
+from typing import Annotated, TypedDict
+
+from langchain_core.messages import HumanMessage
+from langgraph.graph import StateGraph
+from langgraph.graph.message import add_messages
+
+# 1. 그래프 상태 정의
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+# 2. 그래프 및 노드 생성
+graph_builder = StateGraph(State)
+
+def greet(state: State):
+    return {"messages": ["Hello!"]}
+
+def ask_question(state: State):
+    return {"messages": ["How can I help you?"]}
+
+graph_builder.add_node("greeter", greet)
+graph_builder.add_node("questioner", ask_question)
+graph_builder.add_edge("greeter", "questioner")
+graph_builder.set_entry_point("greeter")
+graph_builder.set_finish_point("questioner")
+
+graph = graph_builder.compile()
+
+# 3. stream_log를 사용한 실행 및 로깅
+async def run_and_log():
+    async for log in graph.astream_log(
+        {"messages": [HumanMessage(content="Start")]},
+    ):
+        print("---")
+        print(f"OP: {log.op}")
+        print(f"PATH: {log.path}")
+        if 'final_output' in log.data:
+            print(f"OUTPUT: {log.data['final_output']}")
+
+# 실행
+import asyncio
+asyncio.run(run_and_log())
 ```
 
-## 7. 모니터링 및 알림
+### 5.2 로그 출력 해석
 
-### 7.1 실시간 모니터링
+위 코드를 실행하면 다음과 유사한 로그가 터미널에 출력됩니다. 이를 통해 어떤 노드가 어떤 순서로 실행되었고, 각 노드가 어떤 결과를 반환했는지 명확히 알 수 있습니다.
 
-```python
-import threading
-from collections import defaultdict
-
-class GraphMonitor:
-    """그래프 실행 모니터링"""
-    
-    def __init__(self):
-        self.execution_stats = defaultdict(list)
-        self.error_count = defaultdict(int)
-        self.lock = threading.Lock()
-    
-    def record_execution(self, node_name: str, execution_time: float, success: bool):
-        with self.lock:
-            self.execution_stats[node_name].append(execution_time)
-            if not success:
-                self.error_count[node_name] += 1
-    
-    def get_stats(self) -> Dict[str, Any]:
-        with self.lock:
-            stats = {}
-            for node_name, times in self.execution_stats.items():
-                stats[node_name] = {
-                    "avg_time": sum(times) / len(times),
-                    "min_time": min(times),
-                    "max_time": max(times),
-                    "total_executions": len(times),
-                    "error_count": self.error_count[node_name]
-                }
-            return stats
-    
-    def check_health(self) -> bool:
-        """시스템 상태 체크"""
-        stats = self.get_stats()
-        
-        for node_name, node_stats in stats.items():
-            # 에러율이 10% 이상이면 경고
-            error_rate = node_stats["error_count"] / node_stats["total_executions"]
-            if error_rate > 0.1:
-                logger.warning(f"[{node_name}] 높은 에러율: {error_rate:.2%}")
-                return False
-            
-            # 평균 실행 시간이 30초 이상이면 경고
-            if node_stats["avg_time"] > 30:
-                logger.warning(f"[{node_name}] 긴 실행 시간: {node_stats['avg_time']:.2f}초")
-                return False
-        
-        return True
-
-# 전역 모니터 인스턴스
-graph_monitor = GraphMonitor()
+```
+---
+OP: add
+PATH: /logs/greeter
+OUTPUT: {'messages': ['Hello!']}
+---
+OP: add
+PATH: /logs/questioner
+OUTPUT: {'messages': ['How can I help you?']}
+---
+OP: add
+PATH: /logs/__end__
+OUTPUT: {'messages': [HumanMessage(content='Start'), 'Hello!', 'How can I help you?']}
 ```
 
-## 8. 베스트 프랙티스
+이처럼 `stream_log`를 활용하면 외부 도구 없이도 print 문만으로 충분히 LangGraph의 동작을 디버깅하고 이해할 수 있습니다.
 
-### 8.1 로깅 가이드라인
+## 6. 베스트 프랙티스
+
+### 6.1 로깅 가이드라인
 
 1. **구조화된 로깅 사용**: JSON 형태로 일관된 로그 포맷 유지
 2. **적절한 로그 레벨**: DEBUG, INFO, WARNING, ERROR 레벨을 적절히 활용
@@ -395,7 +287,7 @@ graph_monitor = GraphMonitor()
 4. **에러 컨텍스트**: 에러 발생 시 충분한 컨텍스트 정보 포함
 5. **민감 정보 보호**: 개인정보나 API 키 등은 로그에서 제외
 
-### 8.2 운영 환경 고려사항
+### 6.2 운영 환경 고려사항
 
 - **로그 레벨 조정**: 운영 환경에서는 INFO 레벨 이상만 출력
 - **로그 로테이션**: 로그 파일 크기 관리
