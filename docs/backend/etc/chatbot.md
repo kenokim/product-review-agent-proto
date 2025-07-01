@@ -63,6 +63,15 @@ msg = [HumanMessage(content="Hi! I'm Bob")]  # 첫 질문
 print(app.invoke({"messages": msg}, config)["messages"][-1].content)
 ```
 
+### 3-2. MemorySaver 작동 원리 & 주의사항
+
+| 환경 | MemorySaver 필요 여부 | 이유 |
+|-------|---------------------|------|
+| **로컬 파이썬 스크립트/서버** | **필수** | 실행이 끝나면 상태가 사라지므로 `MemorySaver` 등 체크포인터가 있어야 `thread_id`별 대화가 이어집니다. |
+| **LangGraph Cloud / Runtime(local_dev)** | 선택 | 플랫폼이 내부적으로 Postgres 체크포인터를 제공하므로 `checkpointer`를 지정하지 않아도 상태가 자동 저장됩니다. 지정하면 경고가 뜹니다. |
+
+*MemorySaver* 는 **프로세스 메모리**에만 기록하므로 서버가 재시작되면 데이터가 사라집니다. 영구 저장이 필요하면 `SqliteSaver`(로컬 파일)나 `PostgresSaver`(DB)로 교체하세요.
+
 ---
 
 ## 4. 프롬프트 템플릿 & 커스텀 State 추가

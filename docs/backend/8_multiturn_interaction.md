@@ -128,3 +128,89 @@ print(bot.invoke({"messages": msg2}, config)["messages"][-1].content)
 5. 같은 `thread_id`로 다음 호출 시 ② 단계부터 반복 ⇒ 대화 맥락 유지
 
 따라서 "**State + Checkpointer**"가 모두 있어야 진정한 멀티턴 대화가 구현됩니다. 한쪽이라도 빠지면 대화 기록이 이어지지 않으니 구현 시 두 부분을 모두 확인하세요. 
+
+## 6. 멀티턴 대화 관리 패턴 비교
+
+멀티턴 챗봇을 만들 때 "대화 기록을 **어떻게** LLM에 넘길 것인가"는 비용·성능·맥락 품질을 좌우하는 핵심 설계 포인트입니다. LangGraph는 **State**에 누적된 `messages`를 그대로 LLM에 전달할 수도 있고, `pre_model_hook` 나 커스텀 **리듀서**(예: `add_messages`)를 이용해 *윈도우 슬라이딩*·*요약*·*필터링* 등을 적용할 수도 있습니다.
+
+> **추가 레퍼런스**
+> - **[LangGraph Concepts › Memory › Short-term](https://langchain-ai.github.io/langgraph/concepts/memory/#short-term-memory)**  
+> - **[How-to › Manage conversation history in a ReAct agent](https://langchain-ai.github.io/langgraph/how-tos/create-react-agent-manage-message-history/)**  
+> - **[Sliding-window tutorial](https://aiproduct.engineer/tutorials/langgraph-tutorial-message-history-management-with-sliding-windows-unit-12-exercise-3)**  
+> - **GitHub Discussion #3810 "Replace message history atomically"**
+
+### 6.1 전체 메시지 전달 (우리 프로젝트 기본값)
+
+```python
+from .state import get_recent_user_messages  # 최근 20개를 그대로 사용
+user_message = get_recent_user_messages(state["messages"], limit=20)
+```
+
+- **장점**: 구현이 가장 단순하고, 모델이 과거 맥락을 완전히 파악할 수 있다.
+- **단점**:  
+  • 대화가 길어지면 토큰이 빠르게 폭증 → 비용·지연 증가  
+  • 20개 이상이 되면 과거 정보가 잘려나가 context loss 발생 가능  
+- **언제 적합한가?**  
+  • 짧은 세션, 데스크톱 앱 수준의 길지 않은 상담, 혹은 프로토타입 단계.
+
+### 6.2 고정 윈도우 (Windowed History)
+
+LangGraph 공식 예시에서는 `trim_messages()` 유틸 또는 커스텀 `pre_model_hook`을 사용해 **N**개(혹은 **M** tokens)만 유지하는 패턴을 권장합니다.
+
+```python
+from langchain_core.messages.utils import trim_messages, count_tokens_approximately
+
+MAX_TOKENS = 512
+
+def pre_model_hook(state):
+    windowed = trim_messages(
+        state["messages"],
+        strategy="last",              # 최근 메시지만 유지
+        token_counter=count_tokens_approximately,
+        max_tokens=MAX_TOKENS,
+    )
+    # LLM 입력 전용
+    return {"llm_input_messages": windowed}
+```
+
+- **장점**: 토큰 한도를 명확히 제어, latency·비용 예측 용이.
+- **단점**: 잘려나간 과거 정보를 완전히 잃어버림.
+- **링크**: [LangGraph How-To – Manage conversation history](https://langchain-ai.github.io/langgraph/how-tos/create-react-agent-manage-message-history/).
+
+### 6.3 요약 (Summarization) 전략
+
+`langmem.short_term.SummarizationNode`를 **pre_model_hook**으로 넣으면 과거 메시지를 요약해 압축할 수 있습니다.
+
+```python
+from langmem.short_term import SummarizationNode
+from langchain_core.messages.utils import count_tokens_approximately
+
+summarizer = SummarizationNode(
+    token_counter=count_tokens_approximately,
+    model=ChatOpenAI(model="gpt-4o"),
+    max_tokens=384,
+    max_summary_tokens=128,
+    output_messages_key="llm_input_messages",
+)
+```
+
+- **장점**: 긴 대화도 맥락 핵심을 보존하면서 토큰을 줄일 수 있다.
+- **단점**: 요약 과정에서 세부 정보 손실 및 추가 추론 비용 발생.
+- **링크**: [공식 Summarization 예제](https://langchain-ai.github.io/langgraph/how-tos/create-react-agent-manage-message-history/#summarizing-message-history).
+
+### 6.4 필터링·커스텀 리듀서
+
+특정 도메인(예: 코드 리뷰, 리서치)에선 "질문·답변"만 남기거나, 에이전트 Action 로그를 제거하는 **커스텀 리듀서**를 쓸 수 있습니다. GitHub Discussion [langgraph #3810](https://github.com/langchain-ai/langgraph/discussions/3810)에서 제시된 예시처럼 `ReduceMessage`를 만들어 전체 히스토리를 교체·삭제할 수도 있습니다.
+
+---
+
+### 결론: 어떤 방법을 쓸까?
+
+| 사용 시나리오 | 권장 패턴 | 비고 |
+|---------------|----------|------|
+| MVP·단기 세션, 맥락 길이 ≤ 20 문장 | **전체 메시지 전달** | 구현 단순·디버깅 용이 |
+| 고객 챗봇, 일정 길이 이하 컨텍스트 유지 | **고정 윈도우** | 토큰/비용 예측 가능 |
+| 긴 리서치·문서 작성, 맥락 유지 필수 | **요약 전략** | 정보 손실 최소화 |
+| 특수 도메인 (코드 diff, DB 로그 등) | **필터링/커스텀** | 도메인 맞춤 전처리 |
+
+우리 서비스는 현재 **전체 메시지 전달(최근 20개)** 방식을 채택했습니다. 대화가 20턴 이상 길어지거나 API 비용이 부담된다면 **윈도우** 나 **요약** 전략으로 교체할 수 있도록 `pre_model_hook` 패턴을 도입할 여지를 남겨두었습니다. 

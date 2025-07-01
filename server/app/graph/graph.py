@@ -25,7 +25,7 @@ from .prompts import (
 )
 from .state import (
     ProductRecommendationState,
-    get_latest_user_message
+    get_recent_user_messages
 )
 from .config import ProductRecommendationConfig
 from .tools_and_schemas import (
@@ -37,9 +37,9 @@ from .tools_and_schemas import (
 
 load_dotenv()
 
-# 로거 설정 (로그 비활성화)
+# 로거 설정 (디버그용 활성화)
 logger = logging.getLogger(__name__)
-logger.disabled = True
+logger.setLevel(logging.INFO)
 
 if os.getenv("GEMINI_API_KEY") is None:
     raise ValueError("GEMINI_API_KEY is not set")
@@ -66,8 +66,8 @@ def validate_request(state: ProductRecommendationState, config: RunnableConfig) 
     # 구조화된 출력을 위한 스키마 적용
     structured_llm = llm.with_structured_output(ValidationResult)
     
-    # 사용자 요청 추출
-    user_message = get_latest_user_message(state["messages"])
+    # 전체 대화 맥락을 프롬프트에 전달하도록 최근 사용자 메시지들을 합칩니다.
+    user_message = get_recent_user_messages(state["messages"])  # full context
     logger.info(f"[validate_request] 사용자 메시지: {user_message[:100]}...")
     
     # 프롬프트 구성
@@ -85,7 +85,7 @@ def validate_request(state: ProductRecommendationState, config: RunnableConfig) 
             "is_request_specific": result.is_specific,
             "response_to_user": result.clarification_question,
             "user_intent": result.extracted_requirements.get("intent", ""),
-            "messages": [ai_message]  # AI가 생성한 구체화 질문을 메시지로 추가
+            "messages": [ai_message]  # AIMessage 객체만 저장
         }
     else:
         return {
@@ -93,7 +93,6 @@ def validate_request(state: ProductRecommendationState, config: RunnableConfig) 
             "response_to_user": result.clarification_question if not result.is_specific else "",
             "user_intent": result.extracted_requirements.get("intent", "")
         }
-
 
 # 2. 검색어 생성 노드
 def generate_search_queries(state: ProductRecommendationState, config: RunnableConfig) -> dict:
@@ -113,7 +112,7 @@ def generate_search_queries(state: ProductRecommendationState, config: RunnableC
     structured_llm = llm.with_structured_output(SearchQueryResult)
     
     user_intent = state.get("user_intent", "")
-    user_message = get_latest_user_message(state["messages"])
+    user_message = get_recent_user_messages(state["messages"])  # full context
     
     search_prompt = get_search_query_prompt(user_message, user_intent, configurable.max_search_queries)
     result = structured_llm.invoke(search_prompt)
@@ -211,7 +210,7 @@ def reflection(state: ProductRecommendationState, config: RunnableConfig) -> dic
     )
     
     # 현재 검색 결과 분석
-    user_message = get_latest_user_message(state["messages"])
+    user_message = get_recent_user_messages(state["messages"])  # full context
     web_research_results = state.get("web_research_result", [])
     search_queries = state.get("search_queries", [])
     sources_gathered = state.get("sources_gathered", [])
@@ -251,7 +250,7 @@ def answer_generation(state: ProductRecommendationState, config: RunnableConfig)
     )
     
     # 사용자 요청과 검색 결과 수집
-    user_message = get_latest_user_message(state["messages"])
+    user_message = get_recent_user_messages(state["messages"])  # full context
     web_research_results = state.get("web_research_result", [])
     sources_gathered = state.get("sources_gathered", [])
     
@@ -335,8 +334,17 @@ def create_product_recommendation_graph():
     
     logger.info("제품 추천 그래프 생성 완료")
     
-    # Checkpointer를 명시적으로 지정하지 않음 → 플랫폼/로컬 기본값 사용
-    return builder.compile()
+    # 멀티턴 대화 영속성:
+    #  - 로컬 파이썬 서버(개발/테스트)에서는 MemorySaver로 상태 유지
+    #  - LangGraph Runtime(local_dev / cloud)에서는 플랫폼이 Postgres Saver를 제공하므로 지정하지 않음
+    #    (참고: docs/backend/8_multiturn_interaction.md §5 State+Checkpointer)
+
+    if os.getenv("LANGGRAPH_API_VARIANT"):
+        # Runtime 환경: 사용자 지정 체크포인터를 생략해야 경고/오류가 발생하지 않음
+        return builder.compile()
+    else:
+        from langgraph.checkpoint.memory import MemorySaver
+        return builder.compile(checkpointer=MemorySaver())
 
 # 그래프 인스턴스 생성
 graph = create_product_recommendation_graph()
@@ -369,26 +377,14 @@ def invoke_with_logging(
     if config is None:
         config = {}
 
-    logger.info("[invoke_with_logging] stream_log 시작")
+    def render(msgs):
+        return [getattr(m, "content", m) if not isinstance(m, dict) else m.get("content", str(m)) for m in msgs]
 
-    # stream_log (최신 LangGraph) 또는 stream(..., stream_mode="log") 2가지 방식을 지원
-    if hasattr(graph, "stream_log"):
-        log_iterator = graph.stream_log(input_state, config)
-    else:
-        # 구버전 LangGraph 호환: stream(..., stream_mode="log") 사용
-        log_iterator = graph.stream(input_state, config, stream_mode="log")
+    logger.info(f"[invoke_with_logging] INITIAL messages ({len(input_state.get('messages', []))}): {render(input_state.get('messages', []))}")
 
-    for log_record in log_iterator:
-        op = getattr(log_record, "op", "-")
-        path = getattr(log_record, "path", "-")
-        data = getattr(log_record, "data", {})
+    result = graph.invoke(input_state, config)
 
-        if isinstance(data, dict) and "final_output" in data:
-            logger.info(
-                f"[stream_log] OP={op}, PATH={path}, OUTPUT preview={str(data['final_output'])[:120]}"
-            )
-        else:
-            logger.info(f"[stream_log] OP={op}, PATH={path}")
+    final_msgs = result.get("messages", [])
+    logger.info(f"[invoke_with_logging] FINAL messages ({len(final_msgs)}): {render(final_msgs)}")
 
-    logger.info("[invoke_with_logging] stream_log 완료, graph.invoke 실행")
-    return graph.invoke(input_state, config)
+    return result

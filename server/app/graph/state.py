@@ -13,7 +13,8 @@ class Product(TypedDict):
 
 class ProductRecommendationState(TypedDict):
     # 대화 기록 (LangGraph 표준)
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, add_messages]   
+    remaining_steps: int
     
     # 사용자 요청 분석 결과
     is_request_specific: bool
@@ -55,3 +56,27 @@ def get_latest_user_message(messages: List) -> str:
         elif isinstance(message, dict) and message.get('type') == 'human':
             return message['content']
     return ""
+
+def get_recent_user_messages(messages: List, limit: int = 20) -> str:
+    """지정된 개수(limit)만큼 최신 사용자 메시지를 합쳐 하나의 문자열로 반환합니다.
+
+    LangGraph 상태의 messages 리스트에는 `HumanMessage`, `AIMessage` 객체와
+    dict 형식 메시지가 섞여 있을 수 있습니다. 이 함수는 사람(human) 타입의
+    메시지만 필터링한 뒤, 가장 최신 순서대로 최대 *limit*개까지 가져와
+    상대적으로 오래된 순서(대화 흐름 유지)로 조인합니다.
+    """
+    # 사용자 메시지만 추출 (최신순)
+    user_msgs: List[str] = []
+    for msg in reversed(messages):
+        # LangChain Message 객체의 경우
+        if hasattr(msg, "type") and msg.type == "human":
+            user_msgs.append(msg.content)
+        # dict 로 저장된 경우
+        elif isinstance(msg, dict) and msg.get("type") == "human":
+            user_msgs.append(msg["content"])
+        # limit 만족 시 중단
+        if len(user_msgs) >= limit:
+            break
+
+    # 대화 흐름 보존을 위해 시간순(오래된 → 최신)으로 재정렬 후 합치기
+    return "\n".join(reversed(user_msgs))
