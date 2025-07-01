@@ -3,6 +3,7 @@ import uuid
 import logging
 from typing import Dict, Any, List
 from langchain_core.runnables import RunnableConfig
+from langchain_core.messages import HumanMessage
 
 from app.graph.graph import graph, invoke_with_logging
 from app.schemas.chat_schema import ChatRequest, ChatResponse, SourceInfo
@@ -65,7 +66,7 @@ class ChatService:
         
         # 초기 상태 설정
         initial_state = {
-            "messages": [{"role": "user", "content": message}]
+            "messages": [HumanMessage(content=message)]
         }
         
         # stream_log 기반 실행 (invoke_with_logging 사용)

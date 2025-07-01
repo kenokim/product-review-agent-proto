@@ -8,7 +8,6 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.types import Send
 from langchain_core.runnables import RunnableConfig
 from langchain_core.messages import AIMessage
-from langgraph.checkpoint.memory import MemorySaver
 
 # LLM 관련
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -38,8 +37,9 @@ from .tools_and_schemas import (
 
 load_dotenv()
 
-# 로거 설정
+# 로거 설정 (로그 비활성화)
 logger = logging.getLogger(__name__)
+logger.disabled = True
 
 if os.getenv("GEMINI_API_KEY") is None:
     raise ValueError("GEMINI_API_KEY is not set")
@@ -335,9 +335,8 @@ def create_product_recommendation_graph():
     
     logger.info("제품 추천 그래프 생성 완료")
     
-    # InMemorySaver로 멀티턴 대화 상태를 저장
-    memory_saver = MemorySaver()
-    return builder.compile(checkpointer=memory_saver)
+    # Checkpointer를 명시적으로 지정하지 않음 → 플랫폼/로컬 기본값 사용
+    return builder.compile()
 
 # 그래프 인스턴스 생성
 graph = create_product_recommendation_graph()

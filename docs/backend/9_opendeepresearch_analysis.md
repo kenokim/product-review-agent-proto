@@ -90,6 +90,24 @@ graph TD
 
 이 구조는 각 에이전트가 독립적으로 병렬 작업을 수행하므로 효율성과 속도에 강점이 있습니다.
 
+### 멀티 에이전트 모드에서의 품질 보장 전략
+
+멀티 에이전트(`multi_agent.py`) 아키텍처는 속도를 우선하지만, 다음과 같은 메커니즘으로 품질을 확보합니다.
+
+| 단계 | 품질 메커니즘 | 설명 |
+|------|---------------|------|
+| **1. Section Planning** | Supervisor LLM + `Sections` Tool | 보고서 구조를 먼저 명시적으로 정의해 누락 주제를 방지합니다. |
+| **2. 병렬 Researcher Agents** | **다중 관점** | 각 섹션을 서로 다른 에이전트가 독립적으로 조사·작성해 편향을 완화하고 정보 다양성을 확보합니다. |
+| **3. Researcher 자체 검토** | Section 제출 전 **자체 LLM self-check** | Researcher가 작성한 섹션 초안을 LLM으로 재검토하고, 부족하면 추가 검색→수정 루프를 수행합니다. |
+| **4. Supervisor 집계** | **Cross-Section Review** | 모든 섹션이 모이면 Supervisor가 서론·결론 작성 전 각 섹션 내용을 스캔하여 일관성·중복 여부를 확인합니다. |
+| **5. 최종 Introduction / Conclusion** | Context-Aware LLM 작성 | Supervisor가 전체 섹션을 컨텍스트로 받아 서론·결론을 작성하면서 자연스럽게 내용 연결과 요약 검증을 수행합니다. |
+
+#### 포인트 요약
+
+1. **다중 시각**: 여러 에이전트가 동시에 작업해 정보 출처와 서술 관점이 다양해집니다.
+2. **두 단계 검토**: (Researcher Self-Check) → (Supervisor Cross-Check)를 거쳐 오류 가능성을 줄입니다.
+3. **중앙 오케스트레이션**: 최종 품질 책임을 Supervisor가 지며, 일관성과 형식 준수를 마지막에 한 번 더 확인합니다.
+
 ## 2. 그래프 기반 워크플로우 (`graph.py`)
 
 '계획-실행(Plan-and-Execute)'에 '인간 피드백(Human-in-the-Loop)'을 결합하여 보고서의 품질과 정확성을 높이는 데 중점을 둡니다.
@@ -185,3 +203,20 @@ graph TD
 | WF-P8 | `clarify_with_user_instructions` | (옵션) 사용자가 명확화 질문 단계 활성화 시 |
 
 > 프롬프트 문자열은 `/deepresearch/src/open_deep_research/(prompts.py|workflow/prompts.py)` 파일에 정의되어 있으며, Jinja-style 플레이스홀더(`{topic}`, `{section_topic}` 등)로 런타임 정보를 주입합니다. 필요 시 인덱스를 참고해 세부 내용을 확인하면 됩니다.
+
+## 3. 품질을 높이는 메커니즘 (Plan → Review → Execute 루프)
+
+Open Deep Research의 그래프 워크플로우는 **계획 → 검토 → 실행** 단계를 반복하며, 두 가지 피드백 루프를 통해 결과물의 품질을 지속적으로 개선합니다.
+
+| 단계 | 품질 보증 포인트 | 세부 설명 |
+|------|-----------------|-----------|
+| **1. Generate Report Plan** | ‑ | LLM이 초기 검색·컨텍스트를 바탕으로 섹션 구조를 생성합니다. |
+| **2. Human Feedback** | **외부 피드백 루프** | `interrupt()`를 사용해 그래프 실행을 일시 중지하고 사용자에게 계획을 보여줍니다. • 사용자가 **승인** 시 다음 단계로 진행 • **피드백** 입력 시 `generate_report_plan`으로 되돌아가 섹션 구조를 재생성합니다. |
+| **3. Section Research Sub-Graph** | **내부 반성 루프** | 각 섹션은 `generate_queries → search_web → write_section` 순서로 작성됩니다. `write_section` 후 LLM-Grader(`section_grader_instructions`)가 **Pass / Fail**을 판정: • **Fail** → 부족한 정보를 바탕으로 새 검색 쿼리를 생성하고 `search_web`로 **루프 백** • **Pass** 또는 `max_search_depth` 초과 → 섹션 완료 |
+| **4. Compile Final Report** | ‑ | 모든 섹션이 통과되면 서론·결론을 추가하고 보고서를 컴파일합니다. |
+
+### 핵심 효과
+
+1. **사용자 맞춤도 향상**: 보고서 계획 단계에서 사용자가 직접 승인/수정할 수 있으므로 결과물이 요구사항에 더 부합합니다.
+2. **정보 정확도**: 섹션별 LLM-Grader가 부족한 근거를 감지해 추가 검색을 유도함으로써 팩트 누락/왜곡을 최소화합니다.
+3. **자동 vs 인간 협업**: 인간 피드백 루프는 고품질이 필요한 초기 설계를 보장하고, 이후 세부 내용은 에이전트 반성 루프로 자동 개선해 **품질과 생산성을 동시에** 확보합니다.

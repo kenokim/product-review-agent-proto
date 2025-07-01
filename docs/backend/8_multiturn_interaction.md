@@ -49,10 +49,6 @@ LangGraph의 대화 관리 메커니즘은 다음 세 가지 핵심 요소로 �
 
 6.  **결과 반환**: 그래프 실행이 모두 끝나면 최종 결과를 클라이언트에게 반환합니다.
 
-![LangGraph Persistence Mechanism](https://mermaid.ink/img/pako:eNqtk01rwzAMhv-K5BlKETok-GEX7LCNDtuoXai0jS1jJ7EtyUpy0I3_vkrbaTfYJdIfefJI8qMEgWfAAS8I7QYwMJa96d19M07M2w1s5wZJ2g0pSjBDBH6OABq8N7D9o4-6C9oYJ6FwS8iM_c2Q1tLp2WnI50oI4Rj65S5z-wU6xY5K5a8r89y2Vd_s8zLzY_v6s8X95Ue5H3x0J0G-4oU7vJ5VnJm7vI3p8GjS2vN2QxP3x12_D-69oPqLd1_Yq9xH7w2w-v-uDq_oXkYc4yJ9W-Cag7z1g06F-8-J7yP2X805H8w3M1kP18c5e62R2r5-K5R05nQ55oE5r5Sg5EaR4X054gCBY0g5iS4GjG8qIQQlR8r1i2Y7JcR02mG9Q5yL9qY-J2442H6xT8_0GDb0qD4EaC4b574jRk1x1h96Y2U91uYw_S8oQxR996e-Wk5QWl8Wq1yXlXm-X0E9pP_uD5r8n7i3Uv130yD1u8p5l7Lp_x24bW2Fhr6QhU6-0W-g0W-g2Wug2Weg2Wug2Weg22gD3D-1G5A?type=png)
-
-*위 이미지는 동작 흐름을 시각적으로 나타낸 다이어그램입니다.*
-
 ---
 
 ## 3. 요약
@@ -111,3 +107,24 @@ print(bot.invoke({"messages": msg2}, config)["messages"][-1].content)
 - **확장성**: 프로덕션 환경에서는 `SqliteSaver`나 `PostgresSaver`로 교체해도 코드 변경은 `checkpointer` 부분뿐입니다.
 
 이 예제는 가장 기본적인 형태이므로, **커스텀 State**(추가 파라미터), **프롬프트 템플릿**, **메시지 트리밍** 등 고급 기능은 `docs/backend/chatbot.md`를 참고하세요. 
+
+---
+
+## 5. 다중 턴 대화를 가능하게 하는 두 축: **State + Checkpointer**
+
+멀티턴 기능이 동작하려면 **두 가지**가 모두 갖춰져야 합니다.
+
+| 구성 요소 | 무엇을 담당하나? | 핵심 포인트 |
+|-----------|-----------------|-------------|
+| **State 스키마**<br/>(예: `messages: Annotated[list, add_messages]`) | • **누적 방식** 정의<br/>• 그래프 한 번 실행(1 러닝 사이클) 안에서<br/>메시지가 계속 **append** 되도록 함 | `add_messages` 리듀서가 새 메시지를 리스트에 붙입니다. 만약 `messages` 채널이 없거나 리듀서가 없는 단순 타입이면, 이전 메시지가 덮어써져 버려 멀티턴이 불가능합니다. |
+| **Checkpointer**<br/>(예: `MemorySaver`, `SqliteSaver`, `PostgresSaver`) | • **영속성** 담당<br/>• `thread_id` 별로 Checkpoint를 저장/로드 | 요청이 새로 올 때마다 `thread_id`에 대응하는 **마지막 Checkpoint**를 불러오고, 실행 후 새 상태를 저장합니다. Checkpointer가 없으면 매 호출이 "새 그래프"로 시작하여 기록이 이어지지 않습니다. |
+
+### 작동 순서 요약
+
+1. 클라이언트가 `thread_id`를 지정해 `graph.invoke()` 호출
+2. Checkpointer가 해당 `thread_id`의 마지막 상태를 **로드**
+3. 노드 실행 중 `messages` 채널이 `add_messages`로 **누적**
+4. 실행 종료 시 Checkpointer가 새로운 Checkpoint를 **저장**
+5. 같은 `thread_id`로 다음 호출 시 ② 단계부터 반복 ⇒ 대화 맥락 유지
+
+따라서 "**State + Checkpointer**"가 모두 있어야 진정한 멀티턴 대화가 구현됩니다. 한쪽이라도 빠지면 대화 기록이 이어지지 않으니 구현 시 두 부분을 모두 확인하세요. 
