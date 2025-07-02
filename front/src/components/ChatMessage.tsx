@@ -11,7 +11,15 @@ interface ChatMessageProps {
   sources?: Source[];
 }
 
+// 변환 함수: [라벨] (URL) -> [라벨](URL)
+function normalizeLinks(text: string): string {
+  // 정규식: 대괄호 안 라벨 + 공백? + 괄호 속 URL
+  return text.replace(/\[([^\]]+)]\s*\((https?:\/\/[^)\s]+)\)/g, '[$1]($2)');
+}
+
 const ChatMessage = ({ message, isBot, timestamp, sources }: ChatMessageProps) => {
+  const processedMessage = normalizeLinks(message);
+
   return (
     <div className={`flex space-x-3 ${isBot ? '' : 'flex-row-reverse space-x-reverse'} mb-6`}>
       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -41,6 +49,7 @@ const ChatMessage = ({ message, isBot, timestamp, sources }: ChatMessageProps) =
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 underline font-medium"
+                      title={href}
                       {...props}
                     >
                       {children}
@@ -96,12 +105,12 @@ const ChatMessage = ({ message, isBot, timestamp, sources }: ChatMessageProps) =
                   ),
                 }}
               >
-                {message}
+                {processedMessage}
               </ReactMarkdown>
             </div>
           ) : (
             <p className="text-sm whitespace-pre-wrap text-white">
-              {message}
+              {processedMessage}
             </p>
           )}
         </div>

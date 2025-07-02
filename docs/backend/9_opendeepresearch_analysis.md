@@ -44,26 +44,29 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph "Graph-based Workflow"
-        GW_START["Start: User Topic"] --> GW_PLAN["1. Generate Report Plan"]
-        GW_PLAN --> GW_HUMAN["2. Human Feedback interrupt"]
-        GW_HUMAN -->|"Feedback"| GW_PLAN
-        GW_HUMAN -->|"Approve"| GW_RESEARCH_SECTIONS["3. Research Sections in Parallel"]
-        
-        subgraph "Section Research Sub-Graph"
-            GW_SUB_START["Start Section"] --> GW_QUERY["Generate Queries"]
-            GW_QUERY --> GW_SEARCH["Search Web"]
-            GW_SEARCH --> GW_WRITE["Write Section"]
-            GW_WRITE --> GW_GRADE["Self-Correct?<br/>Grader"]
-            GW_GRADE -->|"More Info Needed"| GW_SEARCH
-            GW_GRADE -->|"Section OK"| GW_SUB_END["End Section"]
-        end
+    %% ───────── 상위 흐름 ─────────
+    GW_START["Start: User Topic"] --> GW_PLAN["1. Generate Report Plan"]
+    GW_PLAN --> GW_HUMAN["2. Human Feedback<br>interrupt"]
+    GW_HUMAN -->|Feedback| GW_PLAN
+    GW_HUMAN -->|Approve| GW_SECTIONS
 
-        GW_RESEARCH_SECTIONS --> GW_SUB_START
-        GW_SUB_END --> GW_GATHER_SECTIONS["4. Gather Completed Sections"]
-        GW_GATHER_SECTIONS --> GW_COMPILE["5. Compile Final Report"]
-        GW_COMPILE --> GW_END["End: Final Report"]
+    %% 더미 노드로 분기만 표현
+    GW_SECTIONS[/"3. Research Sections in Parallel"/] --> SECTION_START
+
+    %% ───────── 실제 연구 subgraph ─────────
+    subgraph SECTION_FLOW["Section Research"]
+        direction TB
+        SECTION_START["Start Section"] --> QUERY["Generate Queries"]
+        QUERY --> SEARCH["Search Web"]
+        SEARCH --> WRITE["Write Section"]
+        WRITE --> GRADE["Self-Correct?"]
+        GRADE -- "More Info" --> SEARCH
+        GRADE -- OK --> SECTION_END["End Section"]
     end
+
+    SECTION_END --> GATHER["4. Gather Sections"]
+    GATHER --> COMPILE["5. Compile Final Report"]
+    COMPILE --> GW_END["End: Final Report"]
 ```
 
 ## 1. 멀티 에이전트 (`multi_agent.py`)
@@ -119,12 +122,12 @@ graph TD
     -   `SectionState`: 섹션별 연구 하위 그래프의 상태(검색 쿼리, 검색 결과, 내용 등)를 관리합니다.
 -   **Workflow (LangGraph)**:
     1.  **`generate_report_plan` (계획)**: 사용자 `topic`을 받아 초기 웹 검색을 수행하고, 그 컨텍스트를 활용해 LLM이 보고서 전체 계획(`Sections`)을 생성합니다.
-    2.  **`human_feedback` (검토)**: `interrupt()`를 통해 그래프 실행을 일시 중지하고, 생성된 계획을 사용자에게 보여줍니다.
-        -   **승인 (`True`)**: 다음 단계인 섹션별 연구로 진행합니다.
-        -   **피드백 (`str`)**: 사용자의 피드백을 반영하여 `generate_report_plan` 노드를 다시 실행, 계획을 수정합니다.
-    3.  **`build_section_with_web_research` (실행 - 하위 그래프)**: 승인된 계획에 따라 연구가 필요한 각 섹션에 대해 병렬적으로 하위 그래프를 실행합니다.
-        -   **`generate_queries` -> `search_web` -> `write_section`**: 섹션 주제에 맞는 검색어 생성, 웹 검색, 내용 작성을 순차적으로 진행합니다.
-        -   **`write_section` 내 자체 교정**: LLM이 `section_grader_instructions` 프롬프트를 사용해 자신이 작성한 내용의 품질을 스스로 평가합니다. 정보가 부족하다고 판단되면, `search_web` 노드로 다시 돌아가 추가 검색을 수행하는 **반성/개선 루프**를 실행합니다.
+    2.  **`human_feedback` (검토)**: `interrupt()`를 통해 그래프 실행을 일시 중지하고, 생성된 계획을 사용자에게 보여줍니다.<br/>
+        **승인 (`True`)** → 다음 단계인 섹션별 연구로 진행.<br/>
+        **피드백 (`str`)** → 사용자의 피드백을 반영하여 `generate_report_plan` 노드를 다시 실행, 계획을 수정.
+    3.  **`build_section_with_web_research` (실행 - 하위 그래프)**: 승인된 계획에 따라 연구가 필요한 각 섹션에 대해 병렬적으로 하위 그래프를 실행합니다.<br/>
+        **`generate_queries → search_web → write_section`** 순서로 섹션 주제에 맞는 검색어 생성·웹 검색·내용 작성을 진행.<br/>
+        **Self-grading**: `write_section` 직후 LLM이 `section_grader_instructions`로 초안을 평가하고 부족하면 `search_web`로 **루프 백**하여 추가 검색/수정.
     4.  **`compile_final_report` (취합)**: 모든 섹션 작성이 완료되면, 결과물들을 하나로 모아 최종 보고서를 생성합니다.
 
 이 구조는 사용자가 보고서의 방향을 직접 제어할 수 있고, 에이전트가 자체적으로 결과물을 개선하는 과정이 포함되어 있어 더 높은 품질의 결과물을 기대할 수 있습니다.
@@ -220,3 +223,49 @@ Open Deep Research의 그래프 워크플로우는 **계획 → 검토 → 실�
 1. **사용자 맞춤도 향상**: 보고서 계획 단계에서 사용자가 직접 승인/수정할 수 있으므로 결과물이 요구사항에 더 부합합니다.
 2. **정보 정확도**: 섹션별 LLM-Grader가 부족한 근거를 감지해 추가 검색을 유도함으로써 팩트 누락/왜곡을 최소화합니다.
 3. **자동 vs 인간 협업**: 인간 피드백 루프는 고품질이 필요한 초기 설계를 보장하고, 이후 세부 내용은 에이전트 반성 루프로 자동 개선해 **품질과 생산성을 동시에** 확보합니다.
+
+## 4. 리포트 품질을 높이기 위한 핵심 메커니즘
+
+Open Deep Research 코드베이스(`deepresearch/`)는 **LLM-기반 리서치가 흔히 겪는 두 가지 문제**—(1) 불충분하거나 왜곡된 근거, (2) 사용자가 원하는 방향과의 불일치—를 해결하기 위해 다음과 같은 다중 방어선을 둡니다.
+
+| 품질 포인트 | 구현 위치 (파일·노드) | 동작 방식 |
+|-------------|----------------------|------------|
+| **1) 명확화 질문 전처리** | `workflow/workflow.py › initial_router → clarify_with_user` | `clarify_with_user` 노드는 토픽이 모호할 때 LLM이 **첫 턴에 추가 질문**을 생성, `interrupt()`로 사용자와 짧은 Q&A를 수행하여 요구사항을 명확히 합니다. |
+| **2) 검색 → 플랜 생성 시 다중 검색어** | `generate_report_plan` | `report_planner_query_writer_instructions` 프롬프트로 **다양한 쿼리**를 만들고 `select_and_execute_search()`가 여러 검색 API(Tavily·DuckDuckGo 등)를 호출, **컨텍스트 다양성**을 확보합니다. |
+| **3) 사용자 승인 루프** | `human_feedback` | 섹션 구조가 생성되면 `interrupt()`를 통해 사용자가 **True(승인) / 문자열(피드백)** 를 전달. 피드백이면 `generate_report_plan`으로 **되돌아가 재생성** → 사용자가 만족할 때까지 반복. |
+| **4) 섹션별 반성(Self-Grading) 루프** | `write_section` | 섹션 작성 직후 `section_grader_instructions`로 **LLM-Grader** 호출 ▶︎ `pass/fail` 판정. • fail → `follow_up_queries` 생성 → `search_web`로 **루프 백**. 최대 `max_search_depth`까지 반복하며 증거를 보강. |
+| **5) 병렬 가속 + 독립 검증** | `build_section_with_web_research` (Section Sub-Graph) | 모든 섹션은 **독립적인 하위 그래프**로 병렬 실행. 각 섹션이 자체 루프를 도는 동안 다른 섹션이 결과에 영향을 주지 않으므로 **편향·누락 감소** + **속도 향상**. |
+| **6) 모델 역할 분리** | `WorkflowConfiguration` | • **Planner** 모델(더 긴 컨텍스트, 토큰 20k 예산)<br>• **Writer** 모델(섹션·최종 보고서 작성)<br>• **Reflection** 모델(Grader) ― 각 단계에 적합한 모델·파라미터를 바인딩해 **자원 최적화 + 품질**을 동시에 잡습니다. |
+| **7) Structured Output 스키마** | `state.py`, `prompts.py` | 모든 LLM 호출은 `with_structured_output()`으로 **Pydantic 스키마**를 강제. 필드 누락·형식 불일치 시 재시도를 트리거해 **일관된 JSON** 결과를 보장합니다. |
+| **8) Source 포함 옵션** | `WorkflowConfiguration.include_source_str` | 검색 결과(`source_str`)를 섹션·최종 보고서에 함께 저장할 수 있어 **추적 가능성(Traceability)** 확보. |
+
+### 품질 개선 흐름 요약 (Plan → Review → Execute)
+
+```mermaid
+flowchart LR
+    Q1((Clarify)):::human -->|if needed| P1
+    P1["Generate Report Plan"] --> U{{"User<br/>Review"}}:::human
+    U -- approve --> S1
+    U -- feedback --> P1
+    subgraph "Sections (parallel)"
+        S1 --> SubStart
+        SubStart --> Qgen["Generate Queries"]
+        Qgen --> Web["Search Web"]
+        Web --> Write["Write Section"]
+        Write --> Grade{"LLM-Grader"}
+        Grade -- fail --> Qgen
+        Grade -- pass --> SubDone
+    end
+    SubDone --> Gather["Gather Completed Sections"] --> Compile["Compile Final Report"] --> End((Report))
+
+    classDef human fill:#ffd,stroke:#333,stroke-width:1px;
+```
+
+1. **Clarify** 단계에서 요구사항을 명확히→잘못된 방향성 예방.  
+2. **User Review**로 전체 목차를 확정→사용자 맞춤도↑.  
+3. **Section Self-Grading 루프**로 근거 부족을 자동 탐지·보강.  
+4. 병렬 실행 + 모델 분리로 **속도**와 **정확도**를 동시에 달성.
+
+---
+
+이 다층 방어 전략 덕분에 Open Deep Research는 **"빠르지만 부정확한"** 일회성 답변이 아니라, 사용자가 신뢰할 수 있는 **고품질·출처 기반 심층 리포트**를 생성합니다.

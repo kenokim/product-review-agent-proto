@@ -21,6 +21,7 @@ from .prompts import (
     get_web_search_prompt,
     get_reflection_prompt,
     get_answer_prompt,
+    get_report_prompt,
     # get_answer_validation_prompt
 )
 from .state import (
@@ -294,6 +295,62 @@ def answer_generation(state: ProductRecommendationState, config: RunnableConfig)
         "response_to_user": final_content
     }
 
+# 6. 리포트 생성
+def report_generation(state: ProductRecommendationState, config: RunnableConfig) -> dict:
+    """웹 검색 결과를 바탕으로 장문의 제품 추천 리포트를 생성합니다."""
+
+    logger.info("[report_generation] 노드 시작")
+
+    configurable = ProductRecommendationConfig.from_runnable_config(config)
+
+    llm = ChatGoogleGenerativeAI(
+        model=configurable.analysis_model,  # 리포트도 분석 모델 사용
+        temperature=0.2,
+        max_retries=2,
+        api_key=os.getenv("GEMINI_API_KEY")
+    )
+
+    # 사용자 요청 및 웹 리서치 결과 취합
+    user_message = get_recent_user_messages(state["messages"])
+    web_research_results = state.get("web_research_result", [])
+    sources_gathered = state.get("sources_gathered", [])
+
+    logger.info(f"[report_generation] 리포트 생성 중 - 검색 결과: {len(web_research_results)}개, 출처: {len(sources_gathered)}개")
+
+    # 웹 리서치 결과를 하나의 문자열로 구성
+    if web_research_results:
+        products_info = "\n---\n".join(web_research_results)
+    else:
+        products_info = "검색 결과가 없습니다."
+
+    report_prompt = get_report_prompt(user_message, products_info)
+
+    result = llm.invoke(report_prompt)
+
+    final_content = result.content if result and hasattr(result, "content") else "리포트 생성에 실패했습니다."
+
+    # 출처 링크 교체 (answer_generation 로직 재사용)
+    unique_sources = []
+    if sources_gathered and isinstance(sources_gathered, list):
+        for source in sources_gathered:
+            if (
+                isinstance(source, dict)
+                and source.get("short_url")
+                and source["short_url"] in final_content
+            ):
+                final_content = final_content.replace(
+                    source["short_url"], source.get("value", source["short_url"])
+                )
+                unique_sources.append(source)
+
+    logger.info(f"[report_generation] 리포트 생성 완료 - 최종 출처: {len(unique_sources)}개")
+
+    return {
+        "messages": [AIMessage(content=final_content)],
+        "sources_gathered": unique_sources,
+        "response_to_user": final_content,
+    }
+
 def should_refine_or_search(state: ProductRecommendationState) -> str:
     """요청의 구체성에 따른 라우팅 결정"""
     decision = "search" if state.get("is_request_specific", False) else "refine"
@@ -315,7 +372,7 @@ def create_product_recommendation_graph():
     builder.add_node("generate_search_queries", generate_search_queries)
     builder.add_node("web_search", web_search)
     builder.add_node("reflection", reflection)
-    builder.add_node("answer_generation", answer_generation)
+    builder.add_node("report_generation", report_generation)
     
     # 엣지 구성
     builder.add_edge(START, "validate_request")
@@ -329,8 +386,8 @@ def create_product_recommendation_graph():
     )
     builder.add_conditional_edges("generate_search_queries", continue_to_web_search, ["web_search"])
     builder.add_edge("web_search", "reflection")
-    builder.add_edge("reflection", "answer_generation")
-    builder.add_edge("answer_generation", END)
+    builder.add_edge("reflection", "report_generation")
+    builder.add_edge("report_generation", END)
     
     logger.info("제품 추천 그래프 생성 완료")
     
